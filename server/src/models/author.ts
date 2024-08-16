@@ -1,19 +1,22 @@
 import { Types, Schema } from "mongoose";
 import mongoose from "mongoose";
 
-export interface IAward {
-  award: string;
-  description: string;
-  country?: string;
-  sponsor?: string;
+export interface IAuthor {
+  name: string;
+  description?: string;
+  awards: Types.ObjectId[];
   manga: Types.ObjectId[];
 }
 
-const awardSchema = new mongoose.Schema<IAward>({
-  award: { type: String, required: true },
-  description: { type: String, required: true },
-  country: String,
-  sponsor: String,
+const authorSchema = new mongoose.Schema<IAuthor>({
+  name: { type: String, required: true },
+  description: String,
+  awards: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Award",
+    },
+  ],
   manga: [
     {
       type: Schema.Types.ObjectId,
@@ -26,9 +29,9 @@ type ReturnedObj = {
   _id?: mongoose.Types.ObjectId;
   __v?: number;
   id?: string;
-} & Partial<IAward>;
+} & Partial<IAuthor>;
 
-awardSchema.set("toJSON", {
+authorSchema.set("toJSON", {
   transform: (_document, returnedObj: ReturnedObj) => {
     returnedObj.id = returnedObj._id!.toString();
     delete returnedObj._id;
@@ -36,6 +39,6 @@ awardSchema.set("toJSON", {
   },
 });
 
-const Award = mongoose.model<IAward>("Award", awardSchema);
+const Author = mongoose.model<IAuthor>("Author", authorSchema);
 
-export default Award;
+export default Author;
