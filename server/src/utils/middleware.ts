@@ -19,6 +19,8 @@ export const errorHandler: ErrorRequestHandler = (
       .json({ error: "inputted `title` must be unique" });
   } else if (error.name === "TokenExpiredError") {
     return response.status(401).json({ error: "token expired" });
+  } else if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
   }
 
   next(error);

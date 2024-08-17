@@ -10,7 +10,7 @@ export interface IAward {
 }
 
 const awardSchema = new mongoose.Schema<IAward>({
-  award: { type: String, required: true },
+  award: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   country: String,
   sponsor: String,

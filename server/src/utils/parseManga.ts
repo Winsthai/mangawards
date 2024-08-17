@@ -177,3 +177,19 @@ export const toNewManga = async (object: unknown): Promise<IManga> => {
 
   throw new Error("Incorrect data: a field missing");
 };
+
+export const confirmAward = (object: unknown): string => {
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect or missing data");
+  }
+
+  if ("award" in object) {
+    if (!isString(object.award)) {
+      throw new Error("Award name is not of type string");
+    }
+
+    return object.award;
+  }
+
+  throw new Error("Incorrect data: a field missing");
+};

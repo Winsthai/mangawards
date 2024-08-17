@@ -2,8 +2,9 @@
 import express from "express";
 import Manga from "../models/manga";
 import { adminConfirmation } from "../utils/middleware";
-import { toNewManga } from "../utils/parseManga";
+import { confirmAward, toNewManga } from "../utils/parseManga";
 import Author from "../models/author";
+import Award from "../models/award";
 
 const mangaRouter = express.Router();
 
@@ -45,6 +46,44 @@ mangaRouter.post("/", adminConfirmation, async (request, response, next) => {
     }
 
     response.status(201).json(savedManga);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Add an award (by name) to a manga (and vice versa)
+mangaRouter.post("/:id", adminConfirmation, async (request, response, next) => {
+  try {
+    const id = request.params.id;
+
+    const manga = await Manga.findById(id);
+
+    // Check that manga exists
+    if (!manga) {
+      response.status(400).json({ error: "manga id does not exist" });
+      return;
+    }
+
+    // Body should contain string value
+    const body = confirmAward(request.body);
+
+    // Check that award exists, add manga to award
+    const award = await Award.findOneAndUpdate(
+      { award: body },
+      { $push: { manga: manga._id } }
+    );
+
+    if (!award) {
+      response.status(400).json({ error: "award does not exist" });
+      return;
+    }
+
+    // Add award to manga
+    manga.awards.push(award._id);
+
+    const savedManga = await manga.save();
+
+    response.status(200).json(savedManga);
   } catch (error) {
     next(error);
   }
