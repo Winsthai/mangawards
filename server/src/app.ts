@@ -7,6 +7,7 @@ import { errorHandler } from "./utils/middleware";
 import { MONGODB_URI } from "./utils/config";
 import adminUserRouter from "./controllers/admin";
 import loginRouter from "./controllers/login";
+import mangaRouter from "./controllers/manga";
 
 void mongoose.connect(MONGODB_URI!);
 
@@ -14,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/awards", awardsRouter);
+
+app.use("/api/manga", mangaRouter);
 
 app.use("/api/admin", adminUserRouter);
 

@@ -16,7 +16,9 @@ export const errorHandler: ErrorRequestHandler = (
   ) {
     return response
       .status(400)
-      .json({ error: "inputted `username` must be unique" });
+      .json({ error: "inputted `title` must be unique" });
+  } else if (error.name === "TokenExpiredError") {
+    return response.status(401).json({ error: "token expired" });
   }
 
   next(error);
