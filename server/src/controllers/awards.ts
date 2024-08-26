@@ -2,6 +2,7 @@
 import express from "express";
 import Award, { IAward } from "../models/award";
 import { adminConfirmation } from "../utils/middleware";
+import { toDescription } from "../utils/parseAward";
 
 const awardsRouter = express.Router();
 
@@ -30,5 +31,24 @@ awardsRouter.post("/", adminConfirmation, async (request, response, next) => {
     next(error);
   }
 });
+
+// Update an award's description
+awardsRouter.put(
+  "/:id/description",
+  adminConfirmation,
+  async (request, response, next) => {
+    try {
+      const id = request.params.id;
+
+      const body = toDescription(request.body);
+
+      const result = await Award.findByIdAndUpdate(id, { description: body });
+
+      response.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default awardsRouter;
