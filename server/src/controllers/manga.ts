@@ -62,7 +62,7 @@ mangaRouter.post("/", adminConfirmation, async (request, response, next) => {
   }
 });
 
-// Add an award (by name) to a manga (and vice versa)
+// Add an award (by name) to a manga (and vice versa) as well as add the award to the manga author
 mangaRouter.post("/:id", adminConfirmation, async (request, response, next) => {
   try {
     const id = request.params.id;
@@ -86,6 +86,33 @@ mangaRouter.post("/:id", adminConfirmation, async (request, response, next) => {
 
     if (!award) {
       response.status(400).json({ error: "award does not exist" });
+      return;
+    }
+
+    // Add award to author
+    const author = await Author.findOneAndUpdate(
+      { _id: manga.author },
+      { $push: { awards: award._id } }
+    );
+
+    if (!manga.author.equals(manga.artist)) {
+      const artist = await Author.findOneAndUpdate(
+        { _id: manga.artist },
+        { $push: { awards: award._id } }
+      );
+
+      if (!artist) {
+        response
+          .status(400)
+          .json({ error: "manga does not have a valid author" });
+        return;
+      }
+    }
+
+    if (!author) {
+      response
+        .status(400)
+        .json({ error: "manga does not have a valid author" });
       return;
     }
 

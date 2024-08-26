@@ -8,8 +8,8 @@ export interface IManga {
   coverArt: string;
   description: string;
   originalLanguage: string;
-  volumes: number;
-  chapters: number;
+  volumes: number | null;
+  chapters: number | null;
   demographic: string;
   status: string;
   year: number;
@@ -24,8 +24,8 @@ const mangaSchema = new mongoose.Schema<IManga>({
   coverArt: { type: String, required: true },
   description: { type: String, required: true },
   originalLanguage: { type: String, required: true },
-  volumes: { type: Number, required: true },
-  chapters: { type: Number, required: true },
+  volumes: { type: Number },
+  chapters: { type: Number },
   demographic: { type: String, required: true },
   status: { type: String, required: true },
   year: { type: Number, required: true },

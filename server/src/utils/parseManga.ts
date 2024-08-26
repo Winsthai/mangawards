@@ -53,7 +53,11 @@ const isNumber = (number: unknown): number is number => {
   return typeof number === "number" || number instanceof Number;
 };
 
-const parseVolumes = (object: unknown): number => {
+const parseVolumes = (object: unknown): number | null => {
+  if (object === null) {
+    return object;
+  }
+
   if (!isNumber(object)) {
     throw new Error("Volumes is not of type number");
   }
@@ -61,7 +65,11 @@ const parseVolumes = (object: unknown): number => {
   return object;
 };
 
-const parseChapters = (object: unknown): number => {
+const parseChapters = (object: unknown): number | null => {
+  if (object === null) {
+    return object;
+  }
+
   if (!isNumber(object)) {
     throw new Error("Chapters is not of type number");
   }
