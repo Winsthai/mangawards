@@ -8,6 +8,17 @@ import Award from "../models/award";
 
 const mangaRouter = express.Router();
 
+// Get all manga
+mangaRouter.get("/", async (_request, response) => {
+  const manga = await Manga.find({}).populate([
+    { path: "author", select: "name" },
+    { path: "artist", select: "name" },
+    { path: "awards", select: "award" },
+  ]);
+  Manga.updateMany({});
+  response.json(manga);
+});
+
 mangaRouter.post("/", adminConfirmation, async (request, response, next) => {
   try {
     // Ensure body is of correct type
