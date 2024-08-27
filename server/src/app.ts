@@ -8,6 +8,7 @@ import { MONGODB_URI } from "./utils/config";
 import adminUserRouter from "./controllers/admin";
 import loginRouter from "./controllers/login";
 import mangaRouter from "./controllers/manga";
+import authorsRouter from "./controllers/authors";
 
 void mongoose.connect(MONGODB_URI!);
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use("/api/awards", awardsRouter);
 
 app.use("/api/manga", mangaRouter);
+
+app.use("/api/authors", authorsRouter);
 
 app.use("/api/admin", adminUserRouter);
 
