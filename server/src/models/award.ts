@@ -30,7 +30,7 @@ type ReturnedObj = {
 
 awardSchema.set("toJSON", {
   transform: (_document, returnedObj: ReturnedObj) => {
-    returnedObj.id = returnedObj._id!.toString();
+    /* returnedObj.id = returnedObj._id!.toString(); */
     delete returnedObj._id;
     delete returnedObj.__v;
   },

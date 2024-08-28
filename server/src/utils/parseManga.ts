@@ -2,14 +2,21 @@ import { IManga } from "../models/manga";
 import URL from "url";
 import { Demographic, Status } from "./types";
 import Author from "../models/author";
+import Manga from "../models/manga";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
 };
 
-const parseTitle = (title: unknown): string => {
+const parseTitle = async (title: unknown): Promise<string> => {
   if (!isString(title)) {
     throw new Error("Title is not of type string");
+  }
+
+  const manga = await Manga.findOne({ title: title });
+
+  if (manga !== null) {
+    throw new Error("A manga with this title already exists");
   }
 
   return title;
@@ -29,7 +36,11 @@ const parseCoverArt = (object: unknown): string => {
   return object;
 };
 
-const parseDescription = (object: unknown): string => {
+const parseDescription = (object: unknown): string | null => {
+  if (object === null) {
+    return null;
+  }
+
   if (!isString(object)) {
     throw new Error("Description is not of type string");
   }
@@ -165,7 +176,7 @@ export const toNewManga = async (object: unknown): Promise<IManga> => {
     "tags" in object
   ) {
     const newManga: IManga = {
-      title: parseTitle(object.title),
+      title: await parseTitle(object.title),
       author: await parseAuthor(object.author),
       artist: await parseAuthor(object.artist),
       coverArt: parseCoverArt(object.coverArt),

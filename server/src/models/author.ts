@@ -11,12 +11,7 @@ export interface IAuthor {
 const authorSchema = new mongoose.Schema<IAuthor>({
   name: { type: String, required: true },
   description: String,
-  awards: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Award",
-    },
-  ],
+  awards: [{ type: Schema.Types.ObjectId, ref: "Award" }],
   manga: [
     {
       type: Schema.Types.ObjectId,

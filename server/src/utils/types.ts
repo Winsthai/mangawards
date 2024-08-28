@@ -3,6 +3,8 @@ export enum Demographic {
   Shounen = "shounen",
   Josei = "josei",
   Seinen = "seinen",
+  Children = "children",
+  None = "n/a",
 }
 
 export enum Status {

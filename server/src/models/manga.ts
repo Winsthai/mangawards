@@ -6,7 +6,7 @@ export interface IManga {
   author: Types.ObjectId;
   artist: Types.ObjectId;
   coverArt: string;
-  description: string;
+  description: string | null;
   originalLanguage: string;
   volumes: number | null;
   chapters: number | null;
@@ -22,7 +22,7 @@ const mangaSchema = new mongoose.Schema<IManga>({
   author: { type: Schema.Types.ObjectId, ref: "Author" },
   artist: { type: Schema.Types.ObjectId, ref: "Author" },
   coverArt: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String },
   originalLanguage: { type: String, required: true },
   volumes: { type: Number },
   chapters: { type: Number },
