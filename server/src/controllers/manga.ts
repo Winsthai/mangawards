@@ -9,12 +9,26 @@ import Award from "../models/award";
 const mangaRouter = express.Router();
 
 // Get all manga
-mangaRouter.get("/", async (_request, response) => {
-  const manga = await Manga.find({}).populate([
-    { path: "author", select: "name" },
-    { path: "artist", select: "name" },
-    { path: "awards", select: "award" },
-  ]);
+// Also contains optional title query: ?title=<title> to get a manga of a certain title only
+mangaRouter.get("/", async (request, response) => {
+  const title = request.query.title;
+
+  let manga;
+
+  if (title) {
+    manga = await Manga.find({ title: title }).populate([
+      { path: "author", select: "name" },
+      { path: "artist", select: "name" },
+      { path: "awards", select: "award" },
+    ]);
+  } else {
+    manga = await Manga.find({}).populate([
+      { path: "author", select: "name" },
+      { path: "artist", select: "name" },
+      { path: "awards", select: "award" },
+    ]);
+  }
+
   Manga.updateMany({});
   response.json(manga);
 });
