@@ -141,4 +141,19 @@ mangaRouter.post("/:id", adminConfirmation, async (request, response, next) => {
   }
 });
 
+// Delete a manga by id
+mangaRouter.delete(
+  "/:id",
+  adminConfirmation,
+  async (request, response, next) => {
+    try {
+      const result = await Manga.findByIdAndDelete(request.params.id);
+
+      response.status(204).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default mangaRouter;
