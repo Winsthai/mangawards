@@ -45,7 +45,9 @@ type ReturnedObj = {
 } & Partial<IManga>;
 
 mangaSchema.set("toJSON", {
-  transform: (_document, returnedObj: ReturnedObj) => {
+  transform: (_document, returnedObj: ReturnedObj): ReturnedObj | void => {
+    if (returnedObj.id) return returnedObj;
+
     returnedObj.id = returnedObj._id!.toString();
     delete returnedObj._id;
     delete returnedObj.__v;
