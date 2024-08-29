@@ -10,9 +10,9 @@ export interface IManga {
   originalLanguage: string;
   volumes: number | null;
   chapters: number | null;
-  demographic: string;
+  demographic: string | null;
   status: string;
-  year: number;
+  year: number | null;
   tags: string[];
   awards: Types.ObjectId[];
 }
@@ -26,9 +26,9 @@ const mangaSchema = new mongoose.Schema<IManga>({
   originalLanguage: { type: String, required: true },
   volumes: { type: Number },
   chapters: { type: Number },
-  demographic: { type: String, required: true },
+  demographic: { type: String },
   status: { type: String, required: true },
-  year: { type: Number, required: true },
+  year: { type: Number },
   tags: [{ type: String, required: true }],
   awards: [
     {

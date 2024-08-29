@@ -37,7 +37,7 @@ const parseCoverArt = (object: unknown): string => {
 };
 
 const parseDescription = (object: unknown): string | null => {
-  if (object === null) {
+  if (!object) {
     return null;
   }
 
@@ -65,8 +65,8 @@ const isNumber = (number: unknown): number is number => {
 };
 
 const parseVolumes = (object: unknown): number | null => {
-  if (object === null) {
-    return object;
+  if (object === null || object === "") {
+    return null;
   }
 
   if (!isNumber(object)) {
@@ -77,8 +77,8 @@ const parseVolumes = (object: unknown): number | null => {
 };
 
 const parseChapters = (object: unknown): number | null => {
-  if (object === null) {
-    return object;
+  if (object === null || object === "") {
+    return null;
   }
 
   if (!isNumber(object)) {
@@ -94,7 +94,11 @@ const isDemographic = (param: string): param is Demographic => {
     .includes(param);
 };
 
-const parseDemographic = (object: unknown): string => {
+const parseDemographic = (object: unknown): string | null => {
+  if (object === null) {
+    return null;
+  }
+
   if (!isString(object) || !isDemographic(object)) {
     throw new Error("Incorrect or missing demographic: " + object);
   }
@@ -116,7 +120,11 @@ const parseStatus = (object: unknown): string => {
   return object;
 };
 
-const parseYear = (object: unknown): number => {
+const parseYear = (object: unknown): number | null => {
+  if (object === null) {
+    return object;
+  }
+
   if (!isNumber(object)) {
     throw new Error("Year is not of type number");
   }
