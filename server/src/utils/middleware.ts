@@ -21,6 +21,10 @@ export const errorHandler: ErrorRequestHandler = (
     return response.status(401).json({ error: "token expired" });
   } else if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "SyntaxError") {
+    return response
+      .status(400)
+      .send({ error: "entered information is not of JSON type" });
   }
 
   next(error);

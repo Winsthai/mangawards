@@ -54,4 +54,18 @@ awardsRouter.put(
   }
 );
 
+// Delete an award by id
+awardsRouter.delete(
+  "/:id",
+  adminConfirmation,
+  async (request, response, next) => {
+    try {
+      const result = await Award.findByIdAndDelete(request.params.id);
+      response.status(204).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default awardsRouter;

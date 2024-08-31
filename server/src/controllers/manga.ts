@@ -149,6 +149,9 @@ mangaRouter.delete(
     try {
       const result = await Manga.findByIdAndDelete(request.params.id);
 
+      // Manga will naturally be removed from awards
+      // However, if the manga has awards, those awards must be removed from the author
+
       response.status(204).json(result);
     } catch (error) {
       next(error);
