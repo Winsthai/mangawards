@@ -13,4 +13,15 @@ authorsRouter.get("/", async (_request, response) => {
   response.json(authors);
 });
 
+authorsRouter.get("/:id", async (request, response) => {
+  const id = request.params.id;
+
+  const author = await Author.findById(id).populate([
+    { path: "awards", select: "award" },
+    { path: "manga", select: "title" },
+  ]);
+
+  response.json(author);
+});
+
 export default authorsRouter;

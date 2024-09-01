@@ -33,6 +33,19 @@ mangaRouter.get("/", async (request, response) => {
   response.json(manga);
 });
 
+// Get a single manga based on id
+mangaRouter.get("/:id", async (request, response) => {
+  const id = request.params.id;
+
+  const manga = await Manga.findById(id).populate([
+    { path: "author", select: "name" },
+    { path: "artist", select: "name" },
+    { path: "awards", select: "award" },
+  ]);
+
+  response.json(manga);
+});
+
 mangaRouter.post("/", adminConfirmation, async (request, response, next) => {
   try {
     // Ensure body is of correct type
