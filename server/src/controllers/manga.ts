@@ -149,8 +149,36 @@ mangaRouter.delete(
     try {
       const result = await Manga.findByIdAndDelete(request.params.id);
 
-      // Manga will naturally be removed from awards
-      // However, if the manga has awards, those awards must be removed from the author
+      // Manga will naturally be removed from awards as the ObjectId reference will be gone
+      // However, if the manga has awards, those awards must be removed from the author and artist
+      if (result) {
+        const author = await Author.findById(result.author);
+        const awards = author!.awards;
+        for (const award of result.awards) {
+          const index = awards.findIndex((a) => a.equals(award));
+          if (index >= 0) {
+            awards.splice(index, 1);
+          }
+        }
+        // Potentially delete the author if he has no awards
+        await Author.findByIdAndUpdate(result.author, { awards: awards });
+
+        if (!result.author.equals(result.artist)) {
+          const artist = await Author.findById(result.artist);
+          const awards = artist!.awards;
+          for (const award of result.awards) {
+            const index = awards.findIndex((a) => a.equals(award));
+            if (index >= 0) {
+              awards.splice(index, 1);
+            }
+          }
+          await Author.findByIdAndUpdate(result.artist, { awards: awards });
+        }
+      } else {
+        response
+          .status(404)
+          .json({ error: `manga with id ${request.params.id} not found` });
+      }
 
       response.status(204).json(result);
     } catch (error) {
