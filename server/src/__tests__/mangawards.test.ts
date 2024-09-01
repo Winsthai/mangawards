@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import supertest from "supertest";
 import { cleanData, connect, disconnect } from "./testHelper";
@@ -173,6 +172,12 @@ describe("Mangawards", () => {
           .set("Authorization", `Bearer ${token}`)
           .send({ award: testAward.award });
 
+        // Check that first manga exists with two awards and second manga has one
+        const manga = await api.get("/api/manga");
+        expect(manga.body.length).toEqual(2);
+        expect(manga.body[0].awards.length).toEqual(2);
+        expect(manga.body[1].awards.length).toEqual(1);
+
         // First check that author has two manga and three awards
         const initialAuthor = await api.get("/api/authors");
         expect(initialAuthor.body[0].manga.length).toEqual(2);
@@ -200,6 +205,65 @@ describe("Mangawards", () => {
         expect(authors.body[0].awards[0].id).toEqual(award1.body.id);
         expect(authors.body[1].awards.length).toEqual(1);
         expect(authors.body[1].awards[0].id).toEqual(award1.body.id);
+      });
+
+      it("deleting a manga should also remove its author if that is the author's only manga/awards", async () => {
+        // Add awards to the database
+        await api
+          .post(`/api/awards`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(testAward);
+
+        await api
+          .post(`/api/awards`)
+          .set("Authorization", `Bearer ${token}`)
+          .send(testAward2);
+
+        // Add manga to the database
+        const result1 = await api
+          .post("/api/manga")
+          .set("Authorization", `Bearer ${token}`)
+          .send(testManga);
+
+        // Give awards two awards to manga
+        await api
+          .post(`/api/manga/${result1.body.id}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ award: testAward.award });
+
+        await api
+          .post(`/api/manga/${result1.body.id}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ award: testAward2.award });
+
+        // Check that manga exists with two awards
+        const manga = await api.get("/api/manga");
+        expect(manga.body.length).toEqual(1);
+        expect(manga.body[0].awards.length).toEqual(2);
+
+        // First check that author has one manga and two awards
+        const initialAuthor = await api.get("/api/authors");
+        expect(initialAuthor.body.length).toEqual(2);
+        expect(initialAuthor.body[0].manga.length).toEqual(1);
+        expect(initialAuthor.body[0].awards.length).toEqual(2);
+
+        // Delete the manga from the database
+        await api
+          .delete(`/api/manga/${result1.body.id}`)
+          .set("Authorization", `Bearer ${token}`);
+
+        // Check that the manga has been deleted
+        const finalManga = await api.get("/api/manga");
+        expect(finalManga.body.length).toEqual(0);
+
+        // Check that awards no longer have any manga
+        const finalAwards = await api.get("/api/awards");
+        expect(finalAwards.body[0].manga).toEqual([]);
+        expect(finalAwards.body[1].manga).toEqual([]);
+
+        // Check that the author(s) has been deleted, since that was their only manga/awards
+        const finalAuthors = await api.get("/api/authors");
+        expect(finalAuthors.body.length).toEqual(0);
       });
     });
   });

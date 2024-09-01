@@ -160,8 +160,12 @@ mangaRouter.delete(
             awards.splice(index, 1);
           }
         }
-        // Potentially delete the author if he has no awards
-        await Author.findByIdAndUpdate(result.author, { awards: awards });
+        // Delete the author if he has no awards
+        if (!awards.length) {
+          await Author.findByIdAndDelete(result.author);
+        } else {
+          await Author.findByIdAndUpdate(result.author, { awards: awards });
+        }
 
         if (!result.author.equals(result.artist)) {
           const artist = await Author.findById(result.artist);
@@ -172,7 +176,12 @@ mangaRouter.delete(
               awards.splice(index, 1);
             }
           }
-          await Author.findByIdAndUpdate(result.artist, { awards: awards });
+          // Delete the artist if he has no awards
+          if (!awards.length) {
+            await Author.findByIdAndDelete(result.artist);
+          } else {
+            await Author.findByIdAndUpdate(result.artist, { awards: awards });
+          }
         }
       } else {
         response
