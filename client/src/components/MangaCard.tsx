@@ -2,6 +2,21 @@ import { Box, Card, CardContent, Typography, Chip } from "@mui/material";
 import { BasicManga } from "../types";
 
 const MangaCard = ({ manga }: { manga: BasicManga }) => {
+
+  const awardMap = new Map();
+
+  for (const award of manga.awards) {
+    if (!awardMap.has(award.award)) {
+      awardMap.set(award.award, 1)
+    } else {
+      awardMap.set(award.award, awardMap.get(award.award) + 1)
+    }
+  }
+
+  const awardChips: string[] = []
+  
+  awardMap.forEach((value, key) => value === 1 ? awardChips.push(key) : awardChips.push(`${key} (${value})`))
+
   return (
     <Box
       sx={{
@@ -82,11 +97,11 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
               }}
             >
               <Typography>Awards:</Typography>
-              {manga.awards.map((award) => (
+              {awardChips.map((award) => (
                 <Chip
                   size="small"
-                  label={award.award}
-                  key={award.award}
+                  label={award}
+                  key={award}
                   sx={{ backgroundColor: "#1976d2", color: "white" }}
                 />
               ))}
