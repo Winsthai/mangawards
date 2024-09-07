@@ -1,8 +1,8 @@
 import { Container } from "@mui/material";
-import MangaCard from "./components/MangaCard";
 import mangaService from "./services/manga";
 import { useEffect, useState } from "react";
 import { BasicManga } from "./types";
+import MangaEntries from "./components/Manga/MangaEntries";
 
 const App = () => {
   const [manga, setManga] = useState<BasicManga[]>([]);
@@ -17,10 +17,6 @@ const App = () => {
     void fetchManga();
   }, []);
 
-  /* useEffect(() => {
-    console.log(manga.length);
-  }, [loading]); */
-
   return (
     <>
       <div>
@@ -28,14 +24,7 @@ const App = () => {
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <>
-              {manga.slice(0, 50).map((individualManga) => (
-                <MangaCard
-                  key={individualManga.title}
-                  manga={individualManga}
-                ></MangaCard>
-              ))}
-            </>
+            <MangaEntries manga={manga}></MangaEntries>
           )}
         </Container>
       </div>

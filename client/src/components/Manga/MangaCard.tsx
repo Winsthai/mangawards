@@ -1,21 +1,24 @@
 import { Box, Card, CardContent, Typography, Chip } from "@mui/material";
-import { BasicManga } from "../types";
+import { BasicManga } from "../../types";
+
+const proxyLink = "https://res.cloudinary.com/dxdkcfww1/image/fetch/";
 
 const MangaCard = ({ manga }: { manga: BasicManga }) => {
-
   const awardMap = new Map();
 
   for (const award of manga.awards) {
     if (!awardMap.has(award.award)) {
-      awardMap.set(award.award, 1)
+      awardMap.set(award.award, 1);
     } else {
-      awardMap.set(award.award, awardMap.get(award.award) + 1)
+      awardMap.set(award.award, awardMap.get(award.award) + 1);
     }
   }
 
-  const awardChips: string[] = []
-  
-  awardMap.forEach((value, key) => value === 1 ? awardChips.push(key) : awardChips.push(`${key} (${value})`))
+  const awardChips: string[] = [];
+
+  awardMap.forEach((value, key) =>
+    value === 1 ? awardChips.push(key) : awardChips.push(`${key} (${value})`)
+  );
 
   return (
     <Box
@@ -43,7 +46,7 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
         >
           <Box
             component="img"
-            src={`${manga.coverArt}.256.jpg`}
+            src={`${proxyLink}${manga.coverArt}.256.jpg`}
             alt="Manga cover"
             loading="lazy"
             sx={{
