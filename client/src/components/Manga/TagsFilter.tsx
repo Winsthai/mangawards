@@ -9,7 +9,7 @@ import {
   ListItemText,
   SelectChangeEvent,
 } from "@mui/material";
-import { TAGS } from "../constants";
+import { TAGS } from "../../constants";
 
 const TagsFilter = ({
   tags,

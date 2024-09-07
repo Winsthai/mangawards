@@ -1,9 +1,10 @@
 import { Container, Pagination, SelectChangeEvent } from "@mui/material";
 import { BasicManga } from "../../types";
 import MangaCard from "./MangaCard";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import YearFilter from "./YearFilter";
-import TagsFilter from "../TagsFilter";
+import TagsFilter from "./TagsFilter";
+import SearchFilter from "../SearchFilter";
 
 const NUMENTRIES = 50;
 
@@ -14,6 +15,7 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   /* Filtering */
   const [tags, setTags] = useState<string[]>([]);
   const [year, setYear] = useState("");
+  const [search, setSearch] = useState("");
 
   const years = new Set<string>();
   for (const book of manga) {
@@ -35,8 +37,14 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
       sortedManga = sortedManga.filter((manga) => manga.year === Number(year));
     }
 
+    if (search !== "") {
+      sortedManga = sortedManga.filter((manga) =>
+        manga.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
     setCurrManga(sortedManga);
-  }, [tags, year]);
+  }, [manga, tags, year, search]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -50,6 +58,19 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
     setYear(event.target.value);
   };
 
+  const inputValue = useRef("");
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      setSearch(inputValue.current); // Update state when Enter is pressed
+      console.log(search);
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    inputValue.current = event.target.value;
+  };
+
   return (
     <div>
       <Container
@@ -59,6 +80,11 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
           justifyContent: "space-evenly",
         }}
       >
+        {/* Search filtering */}
+        <SearchFilter
+          handleChange={handleChange}
+          handleKeyDown={handleKeyDown}
+        ></SearchFilter>
         {/* Tags filtering */}
         <TagsFilter tags={tags} handleTagFilter={handleTagFilter}></TagsFilter>
         {/* Year filtering */}
