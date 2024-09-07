@@ -1,20 +1,9 @@
-import {
-  Box,
-  Checkbox,
-  Chip,
-  Container,
-  ListItemText,
-  MenuItem,
-  Pagination,
-  Select,
-  SelectChangeEvent,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Container, Pagination, SelectChangeEvent } from "@mui/material";
 import { BasicManga } from "../../types";
 import MangaCard from "./MangaCard";
 import React, { useEffect, useState } from "react";
-import { TAGS } from "../../constants";
+import YearFilter from "./YearFilter";
+import TagsFilter from "../TagsFilter";
 
 const NUMENTRIES = 50;
 
@@ -24,69 +13,60 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
 
   /* Filtering */
   const [tags, setTags] = useState<string[]>([]);
+  const [year, setYear] = useState("");
+
+  const years = new Set<string>();
+  for (const book of manga) {
+    if (book.year !== null) {
+      years.add(book.year.toString());
+    }
+  }
 
   useEffect(() => {
-    const sortedManga = manga.sort((a, b) => b.awards.length - a.awards.length);
+    let sortedManga = manga.sort((a, b) => b.awards.length - a.awards.length);
 
     if (tags.length !== 0) {
-      setCurrManga(
-        sortedManga.filter((manga) =>
-          tags.every((tag) => manga.tags.includes(tag))
-        )
+      sortedManga = sortedManga.filter((manga) =>
+        tags.every((tag) => manga.tags.includes(tag))
       );
-    } else {
-      setCurrManga(sortedManga);
     }
-  }, [tags]);
+
+    if (year !== "") {
+      sortedManga = sortedManga.filter((manga) => manga.year === Number(year));
+    }
+
+    setCurrManga(sortedManga);
+  }, [tags, year]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
   const handleTagFilter = (event: SelectChangeEvent<string[]>) => {
-    setTags(event.target.value);
+    setTags(event.target.value as string[]);
+  };
+
+  const handleYearFilter = (event: SelectChangeEvent<string>) => {
+    setYear(event.target.value);
   };
 
   return (
     <div>
-      <Container sx={{ display: "flex", marginTop: "2%" }}>
+      <Container
+        sx={{
+          display: "flex",
+          marginTop: "2%",
+          justifyContent: "space-evenly",
+        }}
+      >
         {/* Tags filtering */}
-        <Stack>
-          <Typography sx={{ marginBottom: "10px" }}>Tags</Typography>
-          <Select
-            multiple
-            value={tags}
-            onChange={handleTagFilter}
-            renderValue={(selected) => {
-              if (selected.length === 0) {
-                return <em>Any</em>;
-              }
-              return (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip
-                      key={value}
-                      label={value}
-                      sx={{ backgroundColor: "#1976d2", color: "white" }}
-                    />
-                  ))}
-                </Box>
-              );
-            }}
-            sx={{
-              backgroundColor: "#1c1f26",
-              color: "white",
-            }}
-            displayEmpty
-          >
-            {TAGS.map((tag) => (
-              <MenuItem key={tag} value={tag}>
-                <Checkbox checked={tags.indexOf(tag) > -1} />
-                <ListItemText primary={tag} />
-              </MenuItem>
-            ))}
-          </Select>
-        </Stack>
+        <TagsFilter tags={tags} handleTagFilter={handleTagFilter}></TagsFilter>
+        {/* Year filtering */}
+        <YearFilter
+          year={year}
+          handleYearFilter={handleYearFilter}
+          years={years}
+        ></YearFilter>
       </Container>
       {currManga.slice((page - 1) * 50, page * 50).map((individualManga) => (
         <MangaCard
