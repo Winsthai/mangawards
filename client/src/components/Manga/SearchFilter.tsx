@@ -46,6 +46,7 @@ const SearchFilter = ({
       }}
       sx={{
         input: { color: "white" },
+        marginTop: "2.2em",
         "& label.Mui-focused": {
           color: "white",
         },

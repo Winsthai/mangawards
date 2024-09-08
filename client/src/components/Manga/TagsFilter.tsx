@@ -44,7 +44,7 @@ const TagsFilter = ({
         sx={{
           backgroundColor: "#1c1f26",
           color: "white",
-          width: "10vw",
+          width: "10em",
           flexWrap: "nowrap",
           ".MuiOutlinedInput-notchedOutline": {
             borderColor: "rgba(228, 219, 233, 0.25)",

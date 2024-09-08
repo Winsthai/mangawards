@@ -122,9 +122,16 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
             gap: 3,
           }}
         >
-          {/* Manga Type and Chapter Count */}
+          {/* Manga Demographic and Chapter Count */}
           <Box>
-            <Typography variant="body2">Manga</Typography>
+            <Typography variant="body2">
+              {manga.demographic
+                ? manga.demographic === "n/a"
+                  ? "N/A"
+                  : manga.demographic.charAt(0).toUpperCase() +
+                    manga.demographic.slice(1)
+                : "N/A"}
+            </Typography>
             <Typography variant="caption" color="#C0C0C0">
               {manga.chapters ? <>{manga.chapters} chapters</> : <></>}
             </Typography>

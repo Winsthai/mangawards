@@ -4,7 +4,8 @@ import MangaCard from "./MangaCard";
 import React, { useEffect, useRef, useState } from "react";
 import YearFilter from "./YearFilter";
 import TagsFilter from "./TagsFilter";
-import SearchFilter from "../SearchFilter";
+import SearchFilter from "./SearchFilter";
+import DemographicFilter from "./DemographicFilter";
 
 const NUMENTRIES = 50;
 
@@ -16,6 +17,7 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [year, setYear] = useState("");
   const [search, setSearch] = useState("");
+  const [demographic, setDemographic] = useState("");
 
   const years = new Set<string>();
   for (const book of manga) {
@@ -43,8 +45,21 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
       );
     }
 
+    if (demographic !== "") {
+      sortedManga = sortedManga.filter((manga) => {
+        if (demographic === "N/A") {
+          return (
+            manga.demographic === null ||
+            manga.demographic === demographic.toLowerCase()
+          );
+        }
+        return manga.demographic === demographic.toLowerCase();
+      });
+    }
+
     setCurrManga(sortedManga);
-  }, [manga, tags, year, search]);
+    setPage(1);
+  }, [manga, tags, year, search, demographic]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -71,12 +86,17 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
     inputValue.current = event.target.value;
   };
 
+  const handleDemographicFilter = (event: SelectChangeEvent<string>) => {
+    setDemographic(event.target.value);
+  };
+
   return (
     <div>
       <Container
         sx={{
           display: "flex",
           marginTop: "2%",
+          marginBottom: "2%",
           justifyContent: "space-evenly",
         }}
       >
@@ -87,6 +107,11 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
         ></SearchFilter>
         {/* Tags filtering */}
         <TagsFilter tags={tags} handleTagFilter={handleTagFilter}></TagsFilter>
+        {/* Demographic filtering */}
+        <DemographicFilter
+          demographic={demographic}
+          handleDemographicFilter={handleDemographicFilter}
+        ></DemographicFilter>
         {/* Year filtering */}
         <YearFilter
           year={year}

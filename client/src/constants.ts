@@ -26,3 +26,4 @@ export const TAGS = [
   "Tragedy",
   "Wuxia",
 ];
+export const DEMOGRAPHICS = ["Shoujo", "Shounen", "Josei", "Seinen", "N/A"];
