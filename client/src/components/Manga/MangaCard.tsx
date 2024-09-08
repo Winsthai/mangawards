@@ -105,7 +105,7 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
                   size="small"
                   label={award}
                   key={award}
-                  sx={{ backgroundColor: "#1976d2", color: "white" }}
+                  sx={{ backgroundColor: "green", color: "white" }}
                 />
               ))}
             </Box>

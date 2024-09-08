@@ -6,6 +6,7 @@ import YearFilter from "./YearFilter";
 import TagsFilter from "./TagsFilter";
 import SearchFilter from "./SearchFilter";
 import DemographicFilter from "./DemographicFilter";
+import AwardsFilter from "./AwardFilter";
 
 const NUMENTRIES = 50;
 
@@ -18,6 +19,7 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   const [year, setYear] = useState("");
   const [search, setSearch] = useState("");
   const [demographic, setDemographic] = useState("");
+  const [awards, setAwards] = useState<string[]>([]);
 
   const years = new Set<string>();
   for (const book of manga) {
@@ -57,9 +59,17 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
       });
     }
 
+    if (awards.length !== 0) {
+      sortedManga = sortedManga.filter((manga) =>
+        awards.every((award) =>
+          manga.awards.some((mangaAward) => mangaAward.award === award)
+        )
+      );
+    }
+
     setCurrManga(sortedManga);
     setPage(1);
-  }, [manga, tags, year, search, demographic]);
+  }, [manga, tags, year, search, demographic, awards]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -90,6 +100,10 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
     setDemographic(event.target.value);
   };
 
+  const handleAwardsFilter = (event: SelectChangeEvent<string[]>) => {
+    setAwards(event.target.value as string[]);
+  };
+
   return (
     <div>
       <Container
@@ -107,6 +121,11 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
         ></SearchFilter>
         {/* Tags filtering */}
         <TagsFilter tags={tags} handleTagFilter={handleTagFilter}></TagsFilter>
+        {/* Awards filtering */}
+        <AwardsFilter
+          awards={awards}
+          handleAwardsFilter={handleAwardsFilter}
+        ></AwardsFilter>
         {/* Demographic filtering */}
         <DemographicFilter
           demographic={demographic}

@@ -6,11 +6,20 @@ import { toDescription } from "../utils/parseAward";
 
 const awardsRouter = express.Router();
 
-awardsRouter.get("/", async (_request, response) => {
-  const awards = await Award.find({}).populate({
-    path: "manga",
-    select: "title",
-  });
+awardsRouter.get("/", async (request, response) => {
+  const title = request.query.titles;
+
+  let awards;
+
+  if (title) {
+    awards = await Award.find({}).select("award");
+  } else {
+    awards = await Award.find({}).populate({
+      path: "manga",
+      select: "title",
+    });
+  }
+
   Award.updateMany({});
   response.json(awards);
 });
