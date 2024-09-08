@@ -140,7 +140,7 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
           {/* Year and Status */}
           <Box>
             <Typography variant="body2">
-              {manga.year ? <>{manga.year}</> : <></>}
+              {manga.year ? <>{manga.year}</> : <>Year N/A</>}
             </Typography>
             <Typography variant="caption" color="#C0C0C0">
               {manga.status}

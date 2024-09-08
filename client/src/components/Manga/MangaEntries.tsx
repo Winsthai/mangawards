@@ -7,6 +7,7 @@ import TagsFilter from "./TagsFilter";
 import SearchFilter from "./SearchFilter";
 import DemographicFilter from "./DemographicFilter";
 import AwardsFilter from "./AwardFilter";
+import MangaSorts from "./MangaSorts";
 
 const NUMENTRIES = 50;
 
@@ -20,6 +21,7 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   const [search, setSearch] = useState("");
   const [demographic, setDemographic] = useState("");
   const [awards, setAwards] = useState<string[]>([]);
+  const [sort, setSort] = useState("Awards Won");
 
   const years = new Set<string>();
   for (const book of manga) {
@@ -29,7 +31,33 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   }
 
   useEffect(() => {
-    let sortedManga = manga.sort((a, b) => b.awards.length - a.awards.length);
+    let sortedManga: BasicManga[];
+
+    switch (sort) {
+      case "Awards Won":
+        sortedManga = manga
+          .slice()
+          .sort((a, b) => b.awards.length - a.awards.length);
+        break;
+      case "Alphabetical":
+        sortedManga = manga
+          .slice()
+          .sort((a, b) =>
+            a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+          );
+        console.log(sort);
+        break;
+      case "Year (Descending)":
+        sortedManga = manga
+          .slice()
+          .map((manga) => (manga.year === null ? { ...manga, year: 0 } : manga))
+          .sort((a, b) => b.year! - a.year!);
+        break;
+      default:
+        sortedManga = manga
+          .slice()
+          .sort((a, b) => b.awards.length - a.awards.length);
+    }
 
     if (tags.length !== 0) {
       sortedManga = sortedManga.filter((manga) =>
@@ -69,7 +97,7 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
 
     setCurrManga(sortedManga);
     setPage(1);
-  }, [manga, tags, year, search, demographic, awards]);
+  }, [manga, tags, year, search, demographic, awards, sort]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -102,6 +130,15 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
 
   const handleAwardsFilter = (event: SelectChangeEvent<string[]>) => {
     setAwards(event.target.value as string[]);
+  };
+
+  const handleSort = (
+    event: React.MouseEvent<HTMLElement>,
+    newSort: string | null
+  ) => {
+    if (newSort !== null) {
+      setSort(newSort);
+    }
   };
 
   return (
@@ -137,6 +174,9 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
           handleYearFilter={handleYearFilter}
           years={years}
         ></YearFilter>
+      </Container>
+      <Container>
+        <MangaSorts sort={sort} handleSort={handleSort}></MangaSorts>
       </Container>
       {currManga.slice((page - 1) * 50, page * 50).map((individualManga) => (
         <MangaCard
