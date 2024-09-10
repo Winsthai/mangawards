@@ -3,6 +3,7 @@ import mangaService from "./services/manga";
 import { useEffect, useState } from "react";
 import { BasicManga } from "./types";
 import MangaEntries from "./components/Manga/MangaEntries";
+import NavBar from "./components/NavBar";
 
 const App = () => {
   const [manga, setManga] = useState<BasicManga[]>([]);
@@ -20,6 +21,7 @@ const App = () => {
   return (
     <>
       <div>
+        <NavBar></NavBar>
         <Container style={{ width: "auto" }}>
           {loading ? (
             <div>Loading...</div>

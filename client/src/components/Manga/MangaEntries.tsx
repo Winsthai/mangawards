@@ -116,7 +116,6 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       setSearch(inputValue.current); // Update state when Enter is pressed
-      console.log(search);
     }
   };
 
