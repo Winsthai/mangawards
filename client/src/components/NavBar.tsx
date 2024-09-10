@@ -7,6 +7,19 @@ import Slide from "@mui/material/Slide";
 import { Fade, Box, Fab, Button, Stack } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
+const buttonStyles = {
+  my: 2,
+  color: "white",
+  display: "block",
+  "&:hover": {
+    backgroundColor: "#263d59",
+    color: "#0099ff",
+  },
+  "&:focus": {
+    outline: "none",
+  },
+};
+
 const HideOnScroll = ({ children }: { children: React.ReactElement }) => {
   const trigger = useScrollTrigger({ threshold: 100 });
 
@@ -66,43 +79,13 @@ const NavBar = () => {
                 justifyContent: "space-evenly",
               }}
             >
-              <Button
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  "&:hover": {
-                    backgroundColor: "#263d59",
-                    color: "#0099ff",
-                  },
-                }}
-              >
+              <Button sx={buttonStyles}>
                 <Typography>Manga</Typography>
               </Button>
-              <Button
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  "&:hover": {
-                    backgroundColor: "#263d59",
-                    color: "#0099ff",
-                  },
-                }}
-              >
+              <Button sx={buttonStyles}>
                 <Typography>Awards</Typography>
               </Button>
-              <Button
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  "&:hover": {
-                    backgroundColor: "#263d59",
-                    color: "#0099ff",
-                  },
-                }}
-              >
+              <Button sx={buttonStyles}>
                 <Typography>Authors</Typography>
               </Button>
             </Stack>

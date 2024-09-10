@@ -132,7 +132,7 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   };
 
   const handleSort = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newSort: string | null
   ) => {
     if (newSort !== null) {
