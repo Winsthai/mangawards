@@ -6,6 +6,7 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Slide from "@mui/material/Slide";
 import { Fade, Box, Fab, Button, Stack } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Link } from "react-router-dom";
 
 const buttonStyles = {
   my: 2,
@@ -79,15 +80,21 @@ const NavBar = () => {
                 justifyContent: "space-evenly",
               }}
             >
-              <Button sx={buttonStyles}>
-                <Typography>Manga</Typography>
-              </Button>
-              <Button sx={buttonStyles}>
-                <Typography>Awards</Typography>
-              </Button>
-              <Button sx={buttonStyles}>
-                <Typography>Authors</Typography>
-              </Button>
+              <Link to="/">
+                <Button sx={buttonStyles}>
+                  <Typography>Manga</Typography>
+                </Button>
+              </Link>
+              <Link to="/awards">
+                <Button sx={buttonStyles}>
+                  <Typography>Awards</Typography>
+                </Button>
+              </Link>
+              <Link to="/authors">
+                <Button sx={buttonStyles}>
+                  <Typography>Authors</Typography>
+                </Button>
+              </Link>
             </Stack>
           </Toolbar>
         </AppBar>

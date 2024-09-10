@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { BasicManga } from "./types";
 import MangaEntries from "./components/Manga/MangaEntries";
 import NavBar from "./components/NavBar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   const [manga, setManga] = useState<BasicManga[]>([]);
@@ -21,14 +22,20 @@ const App = () => {
   return (
     <>
       <div>
-        <NavBar></NavBar>
-        <Container style={{ width: "auto" }}>
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            <MangaEntries manga={manga}></MangaEntries>
-          )}
-        </Container>
+        <BrowserRouter>
+          <NavBar></NavBar>
+          <Routes>
+            <Route path="/" element={<Container style={{ width: "auto" }}>
+              {loading ? (
+                <div>Loading...</div>
+              ) : (
+                <MangaEntries manga={manga}></MangaEntries>
+              )}
+            </Container>}></Route>
+            <Route path="/awards" element={<>test</>}></Route>
+            <Route path="/authors" element={<>test</>}></Route>
+          </Routes>
+        </BrowserRouter>
       </div>
     </>
   );
