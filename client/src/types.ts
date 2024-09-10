@@ -8,3 +8,9 @@ export interface BasicManga {
   tags: string[];
   awards: { award: string }[];
 }
+
+export interface BasicAward {
+  award: string;
+  country?: string;
+  sponsor?: string;
+}

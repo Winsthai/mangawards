@@ -8,12 +8,17 @@ const awardsRouter = express.Router();
 
 awardsRouter.get("/", async (request, response) => {
   const title = request.query.titles;
+  const basic = request.query.basic;
 
   let awards;
 
   if (title) {
     awards = await Award.find({}).select("award");
-  } else {
+  }
+  else if (basic) {
+    awards = await Award.find({}).select(["-manga", "-description"]);
+  }
+  else {
     awards = await Award.find({}).populate({
       path: "manga",
       select: "title",
