@@ -14,14 +14,12 @@ const AwardCard = ({ award }: { award: BasicAward }) => {
             {/* Container Box */}
             <Card
                 sx={{
-                    display: "flex",
                     width: "100%",
                     height: "100%",
                     backgroundColor: "#1c1f26",
                     color: "white",
                     marginTop: "16px",
-                    padding: "16px 0 16px 0",
-                    justifyContent: "space-between"
+                    padding: "16px 0 0 0",
                 }}
             >
                 <CardContent sx={{ padding: 0, marginLeft: "3%" }}>
