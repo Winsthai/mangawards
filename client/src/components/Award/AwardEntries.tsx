@@ -11,7 +11,10 @@ const AwardEntries = () => {
     useEffect(() => {
         const fetchAwards = async () => {
             const fetchedAwards = await awardService.getBasicAwards();
-            setAwards(fetchedAwards);
+            // Sort alphabetically
+            setAwards(fetchedAwards.slice().sort((a, b) =>
+                a.award.toLowerCase().localeCompare(b.award.toLowerCase())
+            ));
             setLoading(false); // Set loading to false once data is fetched
         };
         void fetchAwards();

@@ -6,6 +6,7 @@ import MangaEntries from "./components/Manga/MangaEntries";
 import NavBar from "./components/NavBar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AwardEntries from "./components/Award/AwardEntries";
+import AuthorEntries from "./components/Authors/AuthorEntries";
 
 const App = () => {
   const [manga, setManga] = useState<BasicManga[]>([]);
@@ -34,7 +35,7 @@ const App = () => {
               )}
             </Container>}></Route>
             <Route path="/awards" element={<AwardEntries></AwardEntries>}></Route>
-            <Route path="/authors" element={<>test</>}></Route>
+            <Route path="/authors" element={<AuthorEntries></AuthorEntries>}></Route>
           </Routes>
         </BrowserRouter>
       </div>
