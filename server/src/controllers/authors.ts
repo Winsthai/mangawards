@@ -4,11 +4,22 @@ import Author from "../models/author";
 
 const authorsRouter = express.Router();
 
-authorsRouter.get("/", async (_request, response) => {
-  const authors = await Author.find({}).populate([
-    { path: "awards", select: "award" },
-    { path: "manga", select: "title" },
-  ]);
+authorsRouter.get("/", async (request, response) => {
+  const basic = request.query.basic;
+
+  let authors;
+
+  if (basic) {
+    authors = await Author.find({})
+      .populate([{ path: "awards", select: "award" }])
+      .select(["-manga"]);
+  } else {
+    authors = await Author.find({}).populate([
+      { path: "awards", select: "award" },
+      { path: "manga", select: "title" },
+    ]);
+  }
+
   Author.updateMany({});
   response.json(authors);
 });

@@ -4,12 +4,11 @@ import MangaCard from "./MangaCard";
 import React, { useEffect, useRef, useState } from "react";
 import YearFilter from "./YearFilter";
 import TagsFilter from "./TagsFilter";
-import SearchFilter from "./SearchFilter";
+import SearchFilter from "../SearchFilter";
 import DemographicFilter from "./DemographicFilter";
 import AwardsFilter from "./AwardFilter";
 import MangaSorts from "./MangaSorts";
-
-const NUMENTRIES = 50;
+import { NUMENTRIES } from "../../constants";
 
 const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
   const [currManga, setCurrManga] = useState<BasicManga[]>([]);
@@ -45,7 +44,6 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
           .sort((a, b) =>
             a.title.toLowerCase().localeCompare(b.title.toLowerCase())
           );
-        console.log(sort);
         break;
       case "Year (Descending)":
         sortedManga = manga

@@ -74,18 +74,6 @@ mangaRouter.get("/:id", async (request, response) => {
   response.json(manga);
 });
 
-mangaRouter.get("/basic", async (_request, response) => {
-  const manga = await Manga.find({})
-    .select("-originalLanguage")
-    .populate([
-      { path: "author", select: "name" },
-      { path: "artist", select: "name" },
-      { path: "awards", select: "award" },
-    ]);
-
-  response.json(manga);
-});
-
 mangaRouter.post("/", adminConfirmation, async (request, response, next) => {
   try {
     // Ensure body is of correct type

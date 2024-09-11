@@ -14,3 +14,8 @@ export interface BasicAward {
   country?: string;
   sponsor?: string;
 }
+
+export interface BasicAuthor {
+  name: string;
+  awards: { award: string }[];
+}

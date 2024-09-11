@@ -27,3 +27,5 @@ export const TAGS = [
   "Wuxia",
 ];
 export const DEMOGRAPHICS = ["Shoujo", "Shounen", "Josei", "Seinen", "N/A"];
+// Number of entries to display on screen at once for pages with pagination
+export const NUMENTRIES = 50;
