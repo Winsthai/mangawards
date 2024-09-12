@@ -4,8 +4,8 @@ import mongoose from "mongoose";
 export interface IAward {
   award: string;
   description: string;
-  country?: string;
-  sponsor?: string;
+  country: string;
+  sponsor: string;
   manga: Types.ObjectId[];
 }
 

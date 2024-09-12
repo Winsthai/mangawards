@@ -6,40 +6,49 @@ import { toDescription } from "../utils/parseAward";
 
 const awardsRouter = express.Router();
 
-awardsRouter.get("/", async (request, response) => {
+// Get all awards
+awardsRouter.get("/", async (request, response, next) => {
   const title = request.query.titles;
   const basic = request.query.basic;
 
   let awards;
+  try {
+    if (title) {
+      awards = await Award.find({}).select("award");
+    } else if (basic) {
+      awards = await Award.find({}).select(["-manga", "-description"]);
+    } else {
+      awards = await Award.find({}).populate({
+        path: "manga",
+        select: "title",
+      });
+    }
 
-  if (title) {
-    awards = await Award.find({}).select("award");
+    Award.updateMany({});
+    response.json(awards);
+  } catch (error) {
+    next(error);
   }
-  else if (basic) {
-    awards = await Award.find({}).select(["-manga", "-description"]);
-  }
-  else {
-    awards = await Award.find({}).populate({
+});
+
+// Get award by id
+awardsRouter.get("/:id", async (request, response, next) => {
+  const id = request.params.id;
+
+  let award = null;
+
+  try {
+    award = await Award.findById(id).populate({
       path: "manga",
       select: "title",
     });
+    response.json(award);
+  } catch (error) {
+    next(error);
   }
-
-  Award.updateMany({});
-  response.json(awards);
 });
 
-awardsRouter.get("/:id", async (request, response) => {
-  const id = request.params.id;
-
-  const award = await Award.findById(id).populate({
-    path: "manga",
-    select: "title",
-  });
-
-  response.json(award);
-});
-
+// Add a new award
 awardsRouter.post("/", adminConfirmation, async (request, response, next) => {
   try {
     // Ensure body is of correct type
@@ -50,6 +59,7 @@ awardsRouter.post("/", adminConfirmation, async (request, response, next) => {
       description: body.description,
       country: body.country,
       sponsor: body.sponsor,
+      manga: [],
     });
 
     const savedAward = await award.save();

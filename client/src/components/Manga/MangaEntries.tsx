@@ -9,8 +9,21 @@ import DemographicFilter from "./DemographicFilter";
 import AwardsFilter from "./AwardFilter";
 import MangaSorts from "./MangaSorts";
 import { NUMENTRIES } from "../../constants";
+import mangaService from "../../services/manga";
 
-const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
+const MangaEntries = () => {
+  const [manga, setManga] = useState<BasicManga[]>([]);
+  const [loading, setLoading] = useState(true); // To manage loading state
+
+  useEffect(() => {
+    const fetchManga = async () => {
+      const fetchedManga = await mangaService.getAllBasic();
+      setManga(fetchedManga);
+      setLoading(false); // Set loading to false once data is fetched
+    };
+    void fetchManga();
+  }, []);
+
   const [currManga, setCurrManga] = useState<BasicManga[]>([]);
   const [page, setPage] = useState(1);
 
@@ -175,12 +188,22 @@ const MangaEntries = ({ manga }: { manga: BasicManga[] }) => {
       <Container>
         <MangaSorts sort={sort} handleSort={handleSort}></MangaSorts>
       </Container>
-      {currManga.slice((page - 1) * 50, page * 50).map((individualManga) => (
-        <MangaCard
-          key={individualManga.title}
-          manga={individualManga}
-        ></MangaCard>
-      ))}
+      <Container style={{ width: "auto" }}>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            {currManga
+              .slice((page - 1) * 50, page * 50)
+              .map((individualManga) => (
+                <MangaCard
+                  key={individualManga.title}
+                  manga={individualManga}
+                ></MangaCard>
+              ))}
+          </>
+        )}
+      </Container>
       <Pagination
         count={Math.ceil(currManga.length / NUMENTRIES)}
         color="primary"

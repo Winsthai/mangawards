@@ -123,7 +123,7 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
           }}
         >
           {/* Manga Demographic and Chapter Count */}
-          <Box>
+          <Box width="20%">
             <Typography variant="body2">
               {manga.demographic
                 ? manga.demographic === "n/a"

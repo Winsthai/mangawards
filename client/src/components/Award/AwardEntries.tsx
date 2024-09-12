@@ -25,7 +25,7 @@ const AwardEntries = () => {
   }, []);
 
   return (
-    <Container>
+    <Container sx={{ marginBottom: "32px", marginTop: "32px" }}>
       {loading ? (
         <div>Loading...</div>
       ) : (
