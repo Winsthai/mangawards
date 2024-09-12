@@ -75,11 +75,17 @@ const AwardInfo = ({ award }: { award: Award }) => {
           </AccordionSummary>
           <AccordionDetails>
             <List>
-              {award.manga.map((manga, index) => (
-                <ListItem key={index}>
-                  <ListItemText primary={manga.title} />
-                </ListItem>
-              ))}
+              {award.manga
+                .slice()
+                // Sort alphabetically
+                .sort((a, b) =>
+                  a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+                )
+                .map((manga, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={manga.title} />
+                  </ListItem>
+                ))}
             </List>
           </AccordionDetails>
         </Accordion>
