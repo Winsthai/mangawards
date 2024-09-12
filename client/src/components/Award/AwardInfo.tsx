@@ -71,7 +71,7 @@ const AwardInfo = ({ award }: { award: Award }) => {
               },
             }}
           >
-            <Typography>Manga Winners</Typography>
+            <Typography>Manga Winners ({award.manga.length})</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <List>

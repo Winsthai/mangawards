@@ -19,6 +19,7 @@ export interface BasicAward {
 export interface BasicAuthor {
   name: string;
   awards: { award: string }[];
+  id: string;
 }
 
 export interface Award {
@@ -27,4 +28,11 @@ export interface Award {
   country?: string;
   sponsor?: string;
   manga: { title: string; id: string }[];
+}
+
+export interface Author {
+  name: string;
+  description?: string;
+  awards: { award: string, id: string }[];
+  manga: { title: string, id: string }[];
 }

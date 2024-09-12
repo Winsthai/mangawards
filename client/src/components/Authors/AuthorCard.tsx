@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, Chip, Typography } from "@mui/material";
 import { BasicAuthor } from "../../types";
+import { Link } from "react-router-dom";
 
 const AuthorCard = ({ author }: { author: BasicAuthor }) => {
   const awardMap = new Map();
@@ -38,7 +39,7 @@ const AuthorCard = ({ author }: { author: BasicAuthor }) => {
         }}
       >
         <CardContent sx={{ padding: 0, marginLeft: "3%" }}>
-          <Typography variant="h6" fontWeight="bold">
+          <Typography variant="h6" fontWeight="bold" component={Link} to={`/authors/${author.id}`} sx={{ display: "inline", color: "#4778c9" }}>
             {author.name}
           </Typography>
           <Box
