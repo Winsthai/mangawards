@@ -1,5 +1,6 @@
 import { Box, Card, CardContent, Typography, Chip } from "@mui/material";
 import { BasicManga } from "../../types";
+import { Link } from "react-router-dom";
 
 const proxyLink = "https://res.cloudinary.com/dxdkcfww1/image/fetch/";
 
@@ -70,7 +71,12 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
         >
           {/* Manga Title and Tags */}
           <CardContent sx={{ padding: 0 }}>
-            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            <Typography
+              variant="h6"
+              component={Link}
+              to={`/manga/${manga.id}`}
+              sx={{ fontWeight: "bold", display: "inline", color: "white" }}
+            >
               {manga.title}
             </Typography>
             <Box

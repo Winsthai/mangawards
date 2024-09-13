@@ -7,6 +7,7 @@ export interface BasicManga {
   year: number | null;
   tags: string[];
   awards: { award: string }[];
+  id: string;
 }
 
 export interface BasicAward {
@@ -33,6 +34,22 @@ export interface Award {
 export interface Author {
   name: string;
   description?: string;
-  awards: { award: string, id: string }[];
-  manga: { title: string, id: string }[];
+  awards: { award: string; id: string }[];
+  manga: { title: string; id: string }[];
+}
+
+export interface Manga {
+  title: string;
+  author: { name: string; id: string };
+  artist: { name: string; id: string };
+  coverArt: string;
+  description: string | null;
+  originalLanguage: string;
+  volumes: number | null;
+  chapters: number | null;
+  demographic: string | null;
+  status: string;
+  year: number | null;
+  tags: string[];
+  awards: { award: string; id: string }[];
 }

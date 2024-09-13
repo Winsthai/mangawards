@@ -11,67 +11,75 @@ const mangaRouter = express.Router();
 // Get all manga
 // Also contains optional title query: ?title=<title> to get a manga of a certain title only
 // Or, include ?basic=true to retrieve manga with only limited information
-mangaRouter.get("/", async (request, response) => {
-  const title = request.query.title;
-  const basic = request.query.basic;
+mangaRouter.get("/", async (request, response, next) => {
+  try {
+    const title = request.query.title;
+    const basic = request.query.basic;
 
-  let manga;
+    let manga;
 
-  if (title) {
-    if (basic) {
-      manga = await Manga.find({ title: title })
-        .populate([{ path: "awards", select: "award" }])
-        .select([
-          "-originalLanguage",
-          "-author",
-          "-artist",
-          "-description",
-          "-volumes",
-          "-id",
+    if (title) {
+      if (basic) {
+        manga = await Manga.find({ title: title })
+          .populate([{ path: "awards", select: "award" }])
+          .select([
+            "-originalLanguage",
+            "-author",
+            "-artist",
+            "-description",
+            "-volumes",
+            "-id",
+          ]);
+      } else {
+        manga = await Manga.find({ title: title }).populate([
+          { path: "author", select: "name" },
+          { path: "artist", select: "name" },
+          { path: "awards", select: "award" },
         ]);
+      }
     } else {
-      manga = await Manga.find({ title: title }).populate([
-        { path: "author", select: "name" },
-        { path: "artist", select: "name" },
-        { path: "awards", select: "award" },
-      ]);
-    }
-  } else {
-    if (basic) {
-      manga = await Manga.find({})
-        .populate([{ path: "awards", select: "award" }])
-        .select([
-          "-originalLanguage",
-          "-author",
-          "-artist",
-          "-description",
-          "-volumes",
-          "-id",
+      if (basic) {
+        manga = await Manga.find({})
+          .populate([{ path: "awards", select: "award" }])
+          .select([
+            "-originalLanguage",
+            "-author",
+            "-artist",
+            "-description",
+            "-volumes",
+            "-id",
+          ]);
+      } else {
+        manga = await Manga.find({}).populate([
+          { path: "author", select: "name" },
+          { path: "artist", select: "name" },
+          { path: "awards", select: "award" },
         ]);
-    } else {
-      manga = await Manga.find({}).populate([
-        { path: "author", select: "name" },
-        { path: "artist", select: "name" },
-        { path: "awards", select: "award" },
-      ]);
+      }
     }
+
+    Manga.updateMany({});
+    response.json(manga);
+  } catch (error) {
+    next(error);
   }
-
-  Manga.updateMany({});
-  response.json(manga);
 });
 
 // Get a single manga based on id
-mangaRouter.get("/:id", async (request, response) => {
-  const id = request.params.id;
+mangaRouter.get("/:id", async (request, response, next) => {
+  try {
+    const id = request.params.id;
 
-  const manga = await Manga.findById(id).populate([
-    { path: "author", select: "name" },
-    { path: "artist", select: "name" },
-    { path: "awards", select: "award" },
-  ]);
+    const manga = await Manga.findById(id).populate([
+      { path: "author", select: "name" },
+      { path: "artist", select: "name" },
+      { path: "awards", select: "award" },
+    ]);
 
-  response.json(manga);
+    response.json(manga);
+  } catch (error) {
+    next(error);
+  }
 });
 
 mangaRouter.post("/", adminConfirmation, async (request, response, next) => {

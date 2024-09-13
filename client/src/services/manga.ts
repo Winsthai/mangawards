@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
-import { BasicManga } from "../types";
+import { BasicManga, Manga } from "../types";
 
 const getAllBasic = async (): Promise<BasicManga[]> => {
   const { data } = await axios.get(`${apiBaseUrl}/manga?basic=true`);
@@ -8,4 +8,10 @@ const getAllBasic = async (): Promise<BasicManga[]> => {
   return data;
 };
 
-export default { getAllBasic };
+const getManga = async (id: string): Promise<Manga> => {
+  const { data } = await axios.get(`${apiBaseUrl}/manga/${id}`);
+
+  return data;
+};
+
+export default { getAllBasic, getManga };

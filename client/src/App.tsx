@@ -5,6 +5,7 @@ import AwardEntries from "./components/Award/AwardEntries";
 import AuthorEntries from "./components/Authors/AuthorEntries";
 import AwardPage from "./components/Award/AwardPage";
 import AuthorPage from "./components/Authors/AuthorPage";
+import MangaPage from "./components/Manga/MangaPage";
 
 const App = () => {
   return (
@@ -23,7 +24,11 @@ const App = () => {
               element={<AuthorEntries></AuthorEntries>}
             ></Route>
             <Route path="/awards/:id" element={<AwardPage></AwardPage>}></Route>
-            <Route path="/authors/:id" element={<AuthorPage></AuthorPage>}></Route>
+            <Route
+              path="/authors/:id"
+              element={<AuthorPage></AuthorPage>}
+            ></Route>
+            <Route path="/manga/:id" element={<MangaPage></MangaPage>}></Route>
           </Routes>
         </BrowserRouter>
       </div>
