@@ -12,6 +12,7 @@ import {
 import { Author } from "../../types";
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Link } from "react-router-dom";
 
 const AuthorInfo = ({ author }: { author: Author }) => {
   const [expanded, setExpanded] = useState(false);
@@ -29,16 +30,16 @@ const AuthorInfo = ({ author }: { author: Author }) => {
 
   for (const award of author.awards) {
     if (!awardMap.has(award.award)) {
-      awardMap.set(award.award, 1);
+      awardMap.set(award.award, {count: 1, id: award.id});
     } else {
-      awardMap.set(award.award, awardMap.get(award.award) + 1);
+      awardMap.set(award.award, {count: awardMap.get(award.award).count + 1, ...award});
     }
   }
 
-  const awardNames: string[] = [];
+  const awardNames: [string, string][] = [];
 
   awardMap.forEach((value, key) =>
-    value === 1 ? awardNames.push(key) : awardNames.push(`${key} (${value})`)
+    value.count === 1 ? awardNames.push([key, value.id]) : awardNames.push([`${key} (${value.count})`, value.id])
   );
 
   return (
@@ -98,7 +99,9 @@ const AuthorInfo = ({ author }: { author: Author }) => {
                 )
                 .map((manga, index) => (
                   <ListItem key={index}>
-                    <ListItemText primary={manga.title} />
+                    <Link to={`/manga/${manga.id}`}>
+                      <ListItemText primary={manga.title} sx={{color: "white", "&:hover": {color: "#4778c9"}}} />
+                    </Link>
                   </ListItem>
                 ))}
             </List>
@@ -131,10 +134,12 @@ const AuthorInfo = ({ author }: { author: Author }) => {
               {awardNames
                 .slice()
                 // Sort alphabetically
-                .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+                .sort((a, b) => a[0].toLowerCase().localeCompare(b[0].toLowerCase()))
                 .map((award, index) => (
                   <ListItem key={index}>
-                    <ListItemText primary={award} />
+                    <Link to={`/awards/${award[1]}`}>
+                      <ListItemText primary={award[0]} sx={{color: "white", "&:hover": {color: "#4778c9"}}} />
+                    </Link>
                   </ListItem>
                 ))}
             </List>

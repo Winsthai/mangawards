@@ -13,6 +13,7 @@ import {
   Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Link } from "react-router-dom";
 
 const MangaInfo = ({ manga }: { manga: Manga }) => {
   const [expanded, setExpanded] = useState(false);
@@ -25,16 +26,16 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
 
   for (const award of manga.awards) {
     if (!awardMap.has(award.award)) {
-      awardMap.set(award.award, 1);
+      awardMap.set(award.award, {count: 1, id: award.id});
     } else {
-      awardMap.set(award.award, awardMap.get(award.award) + 1);
+      awardMap.set(award.award, {count: awardMap.get(award.award).count + 1, ...award});
     }
   }
 
-  const awardNames: string[] = [];
+  const awardNames: [string, string][] = [];
 
   awardMap.forEach((value, key) =>
-    value === 1 ? awardNames.push(key) : awardNames.push(`${key} (${value})`)
+    value.count === 1 ? awardNames.push([key, value.id]) : awardNames.push([`${key} (${value.count})`, value.id])
   );
 
   return (
@@ -99,16 +100,16 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           </Box>
 
           {/* Text Section */}
-          <Box sx={{ marginLeft: "16px" }}>
+          <Box sx={{ marginLeft: "40px" }}>
             <Typography
               variant="h3"
-              sx={{ color: "white", fontWeight: "bold" }}
+              sx={{ color: "white", fontWeight: "bold", textShadow: "1px 1px 2px black" }}
             >
               {manga.title}
             </Typography>
             <Typography
               variant="body1"
-              sx={{ color: "white", marginTop: "4px" }}
+              sx={{ color: "white", marginTop: "4px", textShadow: "1px 1px 2px black" }}
             >
               {manga.author.name}
               {manga.author.name !== manga.artist.name ? manga.artist.name : ""}
@@ -122,7 +123,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           backgroundColor: "#1c1f26",
           color: "white",
           marginTop: "30px",
-          padding: "2em 2vw 0 2vw",
+          padding: "2em 2vw 1em 2vw",
         }}
       >
         <CardContent>
@@ -149,14 +150,14 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           </Typography>
 
           {/* Manga Volumes and Chapters */}
-          <Typography
+          {manga.volumes && manga.chapters ? <Typography
             variant="body1"
             className="display-linebreak"
             sx={{ marginBottom: "1em" }}
           >
-            {manga.volumes ? <>Volumes: {manga.volumes}</> : <></>} <br />
-            {manga.chapters ? <>Chapters: {manga.chapters}</> : <></>}
-          </Typography>
+            Volumes: {manga.volumes} <br />
+            Chapters: {manga.chapters}
+          </Typography> : <></>}
 
           {/* Manga demographic */}
           {manga.demographic ? (
@@ -219,11 +220,13 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
                   .slice()
                   // Sort alphabetically
                   .sort((a, b) =>
-                    a.toLowerCase().localeCompare(b.toLowerCase())
+                    a[0].toLowerCase().localeCompare(b[0].toLowerCase())
                   )
                   .map((award, index) => (
                     <ListItem key={index}>
-                      <ListItemText primary={award} />
+                      <Link to={`/awards/${award[1]}`}>
+                        <ListItemText primary={award[0]} sx={{color: "white", "&:hover": {color: "#4778c9"}}} />
+                      </Link>
                     </ListItem>
                   ))}
               </List>

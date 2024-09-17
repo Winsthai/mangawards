@@ -12,6 +12,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Award } from "../../types";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const AwardInfo = ({ award }: { award: Award }) => {
   const [expanded, setExpanded] = useState(false);
@@ -83,7 +84,9 @@ const AwardInfo = ({ award }: { award: Award }) => {
                 )
                 .map((manga, index) => (
                   <ListItem key={index}>
-                    <ListItemText primary={manga.title} />
+                    <Link to={`/manga/${manga.id}`}>
+                      <ListItemText primary={manga.title} sx={{color: "white", "&:hover": {color: "#4778c9"}}} />
+                    </Link>
                   </ListItem>
                 ))}
             </List>
