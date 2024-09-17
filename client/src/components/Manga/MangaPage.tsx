@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Manga } from "../../types";
 import mangaService from "../../services/manga";
-import { Container } from "@mui/material";
 import MangaInfo from "./MangaInfo";
 
 const isManga = (object: Manga | { error: string }): boolean => {
@@ -35,7 +34,7 @@ const MangaPage = () => {
   }, [id]);
 
   return (
-    <Container sx={{ marginTop: "20px" }}>
+    <div style={{ overflow: "hidden" }}>
       {loading ? (
         <div>Loading...</div>
       ) : manga ? (
@@ -49,7 +48,7 @@ const MangaPage = () => {
       ) : (
         <>Could not retrieve data</>
       )}
-    </Container>
+    </div>
   );
 };
 
