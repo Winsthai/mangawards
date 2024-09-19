@@ -13,6 +13,7 @@ interface user {
   password: string;
 }
 
+// Login with username and password
 loginRouter.post("/", async (request, response) => {
   const { username, password } = request.body as user;
 
@@ -39,7 +40,12 @@ loginRouter.post("/", async (request, response) => {
     role: role,
   };
 
-  const token = jwt.sign(userForToken, SECRET!, { expiresIn: 60 * 60 });
+  let token;
+  if (role === "admin") {
+    token = jwt.sign(userForToken, SECRET!, { expiresIn: 60 * 60 });
+  } else {
+    token = jwt.sign(userForToken, SECRET!);
+  }
 
   response.status(200).send({
     token,

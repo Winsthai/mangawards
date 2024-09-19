@@ -6,6 +6,8 @@ import AuthorEntries from "./components/Authors/AuthorEntries";
 import AwardPage from "./components/Award/AwardPage";
 import AuthorPage from "./components/Authors/AuthorPage";
 import MangaPage from "./components/Manga/MangaPage";
+import Login from "./components/Login/Login";
+import SignUp from "./components/Login/SignUp";
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
               element={<AuthorPage></AuthorPage>}
             ></Route>
             <Route path="/manga/:id" element={<MangaPage></MangaPage>}></Route>
+            <Route path="/login" element={<Login></Login>}></Route>
+            <Route path="/signUp" element={<SignUp></SignUp>}></Route>
           </Routes>
         </BrowserRouter>
       </div>
