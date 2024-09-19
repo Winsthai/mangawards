@@ -6,6 +6,7 @@ import adminUserRouter from "../controllers/admin";
 import loginRouter from "../controllers/login";
 import mangaRouter from "../controllers/manga";
 import authorsRouter from "../controllers/authors";
+import userRouter from "../controllers/user";
 
 const createServer = () => {
   const app = express();
@@ -20,6 +21,8 @@ const createServer = () => {
   app.use("/api/authors", authorsRouter);
 
   app.use("/api/admin", adminUserRouter);
+
+  app.use("/api/user", userRouter);
 
   app.use("/api/login", loginRouter);
 

@@ -39,6 +39,8 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
           color: "white",
           marginTop: "16px",
           padding: "16px 0 16px 0",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+          border: "solid",
         }}
       >
         {/* Cover Image */}
@@ -75,7 +77,12 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
               variant="h6"
               component={Link}
               to={`/manga/${manga.id}`}
-              sx={{ fontWeight: "bold", display: "inline", color: "white" }}
+              sx={{
+                fontWeight: "bold",
+                display: "inline",
+                color: "white",
+                textShadow: "1px 1px 2px black",
+              }}
             >
               {manga.title}
             </Typography>
@@ -93,7 +100,11 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
                   label={tag}
                   key={tag}
                   size="small"
-                  sx={{ backgroundColor: "#1976d2", color: "white" }}
+                  sx={{
+                    backgroundColor: "#1976d2",
+                    color: "white",
+                    fontWeight: "500",
+                  }}
                 />
               ))}
             </Box>
@@ -111,7 +122,11 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
                   size="small"
                   label={award}
                   key={award}
-                  sx={{ backgroundColor: "green", color: "white" }}
+                  sx={{
+                    backgroundColor: "green",
+                    color: "white",
+                    fontWeight: "500",
+                  }}
                 />
               ))}
             </Box>

@@ -40,7 +40,7 @@ export const adminConfirmation: RequestHandler = (request, _response, next) => {
 
     const decodedToken = jwt.verify(token, SECRET!) as jwt.JwtPayload;
 
-    if (!decodedToken.id) {
+    if (!decodedToken.id || decodedToken.role !== "admin") {
       next(jwt.JsonWebTokenError);
     }
   } else {

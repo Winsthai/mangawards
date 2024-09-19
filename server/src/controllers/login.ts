@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import express from "express";
 import AdminUser from "../models/adminUser";
 import { SECRET } from "../utils/config";
+import User from "../models/user";
 
 const loginRouter = express.Router();
 
@@ -11,11 +13,15 @@ interface user {
   password: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-loginRouter.post("/admin", async (request, response) => {
+loginRouter.post("/", async (request, response) => {
   const { username, password } = request.body as user;
 
-  const user = await AdminUser.findOne({ username });
+  let user = await AdminUser.findOne({ username });
+  let role = "admin";
+  if (user === null) {
+    user = await User.findOne({ username });
+    role = "user";
+  }
   // If user does not exist, don't check for password
   const passwordCorrect =
     user === null ? false : await bcrypt.compare(password, user.passwordHash);
@@ -30,6 +36,7 @@ loginRouter.post("/admin", async (request, response) => {
   const userForToken = {
     username: user.username,
     id: user._id,
+    role: role,
   };
 
   const token = jwt.sign(userForToken, SECRET!, { expiresIn: 60 * 60 });

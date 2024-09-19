@@ -20,6 +20,7 @@ const AwardCard = ({ award }: { award: BasicAward }) => {
           color: "white",
           marginTop: "16px",
           padding: "16px 0 0 0",
+          border: "solid",
         }}
       >
         <CardContent sx={{ padding: 0, marginLeft: "3%" }}>
@@ -29,7 +30,12 @@ const AwardCard = ({ award }: { award: BasicAward }) => {
             width="auto"
             component={Link}
             to={`/awards/${award.id}`}
-            sx={{ display: "inline", color: "#4778c9" }}
+            sx={{
+              display: "inline",
+              color: "white",
+              fontWeight: "bold",
+              textShadow: "1px 1px 2px black",
+            }}
           >
             {award.award}
           </Typography>

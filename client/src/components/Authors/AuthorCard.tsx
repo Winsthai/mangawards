@@ -36,10 +36,22 @@ const AuthorCard = ({ author }: { author: BasicAuthor }) => {
           color: "white",
           marginTop: "16px",
           padding: "16px 0 0 0",
+          border: "solid",
         }}
       >
         <CardContent sx={{ padding: 0, marginLeft: "3%" }}>
-          <Typography variant="h6" fontWeight="bold" component={Link} to={`/authors/${author.id}`} sx={{ display: "inline", color: "#4778c9" }}>
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            component={Link}
+            to={`/authors/${author.id}`}
+            sx={{
+              display: "inline",
+              color: "white",
+              fontWeight: "bold",
+              textShadow: "1px 1px 2px black",
+            }}
+          >
             {author.name}
           </Typography>
           <Box
@@ -61,7 +73,7 @@ const AuthorCard = ({ author }: { author: BasicAuthor }) => {
             ))}
           </Box>
           <Typography variant="body2" sx={{ marginTop: "0.5%" }}>
-            Total awards: {author.awards.length}
+            Total awards: <b>{author.awards.length}</b>
           </Typography>
         </CardContent>
       </Card>

@@ -26,16 +26,21 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
 
   for (const award of manga.awards) {
     if (!awardMap.has(award.award)) {
-      awardMap.set(award.award, {count: 1, id: award.id});
+      awardMap.set(award.award, { count: 1, id: award.id });
     } else {
-      awardMap.set(award.award, {count: awardMap.get(award.award).count + 1, ...award});
+      awardMap.set(award.award, {
+        count: awardMap.get(award.award).count + 1,
+        ...award,
+      });
     }
   }
 
   const awardNames: [string, string][] = [];
 
   awardMap.forEach((value, key) =>
-    value.count === 1 ? awardNames.push([key, value.id]) : awardNames.push([`${key} (${value.count})`, value.id])
+    value.count === 1
+      ? awardNames.push([key, value.id])
+      : awardNames.push([`${key} (${value.count})`, value.id])
   );
 
   return (
@@ -44,7 +49,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
         sx={{
           position: "relative",
           width: "100%",
-          height: "300px",
+          height: { xs: "200px", sm: "250px", md: "300px" },
           margin: "0 2vw 0 2vw",
         }}
       >
@@ -87,7 +92,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
             }}
           >
             <img
-              src={manga.coverArt} // Replace with the correct path
+              src={`${manga.coverArt}.256.jpg`} // Replace with the correct path
               alt={manga.title}
               style={{
                 width: "100%",
@@ -103,17 +108,57 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           <Box sx={{ marginLeft: "40px" }}>
             <Typography
               variant="h3"
-              sx={{ color: "white", fontWeight: "bold", textShadow: "1px 1px 2px black" }}
+              sx={{
+                color: "white",
+                fontWeight: "bold",
+                textShadow: "1px 1px 2px black",
+              }}
             >
               {manga.title}
             </Typography>
             <Typography
               variant="body1"
-              sx={{ color: "white", marginTop: "4px", textShadow: "1px 1px 2px black" }}
+              display="inline"
+              component={Link}
+              to={`/authors/${manga.author.id}`}
+              sx={{
+                color: "white",
+                marginTop: "4px",
+                textShadow: "1px 1px 2px black",
+              }}
             >
               {manga.author.name}
-              {manga.author.name !== manga.artist.name ? manga.artist.name : ""}
             </Typography>
+            {manga.author.name !== manga.artist.name ? (
+              <>
+                <Typography
+                  variant="body1"
+                  display="inline"
+                  sx={{
+                    color: "white",
+                    marginTop: "4px",
+                    textShadow: "1px 1px 2px black",
+                  }}
+                >
+                  ,{" "}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  display="inline"
+                  component={Link}
+                  to={`/authors/${manga.artist.id}`}
+                  sx={{
+                    color: "white",
+                    marginTop: "4px",
+                    textShadow: "1px 1px 2px black",
+                  }}
+                >
+                  {`${manga.artist.name}`}
+                </Typography>
+              </>
+            ) : (
+              <></>
+            )}
           </Box>
         </Box>
       </Box>
@@ -140,24 +185,24 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
             <></>
           )}
 
-          {/* Manga Original Language */}
-          <Typography
-            variant="body1"
-            className="display-linebreak"
-            sx={{ marginBottom: "1em" }}
-          >
-            {manga.originalLanguage}
+          {/* Manga Tags */}
+          <Typography variant="body1" sx={{ marginBottom: "1em" }}>
+            Genres: {manga.tags.join(", ")}
           </Typography>
 
           {/* Manga Volumes and Chapters */}
-          {manga.volumes && manga.chapters ? <Typography
-            variant="body1"
-            className="display-linebreak"
-            sx={{ marginBottom: "1em" }}
-          >
-            Volumes: {manga.volumes} <br />
-            Chapters: {manga.chapters}
-          </Typography> : <></>}
+          {manga.volumes && manga.chapters ? (
+            <Typography
+              variant="body1"
+              className="display-linebreak"
+              sx={{ marginBottom: "1em" }}
+            >
+              Volumes: {manga.volumes} <br />
+              Chapters: {manga.chapters}
+            </Typography>
+          ) : (
+            <></>
+          )}
 
           {/* Manga demographic */}
           {manga.demographic ? (
@@ -189,8 +234,6 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           >
             {manga.year ? `Year: ${manga.year}` : ""}
           </Typography>
-
-          {/* Manga Tags */}
 
           {/* Expandable Award List */}
           <Accordion
@@ -225,7 +268,13 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
                   .map((award, index) => (
                     <ListItem key={index}>
                       <Link to={`/awards/${award[1]}`}>
-                        <ListItemText primary={award[0]} sx={{color: "white", "&:hover": {color: "#4778c9"}}} />
+                        <ListItemText
+                          primary={award[0]}
+                          sx={{
+                            color: "white",
+                            "&:hover": { color: "#4778c9" },
+                          }}
+                        />
                       </Link>
                     </ListItem>
                   ))}

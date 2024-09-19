@@ -1,4 +1,9 @@
-import { Container, Pagination, SelectChangeEvent } from "@mui/material";
+import {
+  Container,
+  Pagination,
+  SelectChangeEvent,
+  useMediaQuery,
+} from "@mui/material";
 import { BasicManga } from "../../types";
 import MangaCard from "./MangaCard";
 import React, { useEffect, useRef, useState } from "react";
@@ -151,6 +156,8 @@ const MangaEntries = () => {
     }
   };
 
+  const matches = useMediaQuery("(min-width:742px)");
+
   return (
     <div>
       <Container
@@ -162,10 +169,14 @@ const MangaEntries = () => {
         }}
       >
         {/* Search filtering */}
-        <SearchFilter
-          handleChange={handleChange}
-          handleKeyDown={handleKeyDown}
-        ></SearchFilter>
+        {matches ? (
+          <SearchFilter
+            handleChange={handleChange}
+            handleKeyDown={handleKeyDown}
+          ></SearchFilter>
+        ) : (
+          <></>
+        )}
         {/* Tags filtering */}
         <TagsFilter tags={tags} handleTagFilter={handleTagFilter}></TagsFilter>
         {/* Awards filtering */}

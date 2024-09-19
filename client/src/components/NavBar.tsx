@@ -7,9 +7,9 @@ import Slide from "@mui/material/Slide";
 import { Fade, Box, Fab, Button, Stack } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "@mui/material";
 
 const buttonStyles = {
-  my: 2,
   color: "white",
   display: "block",
   "&:hover": {
@@ -31,7 +31,7 @@ const HideOnScroll = ({ children }: { children: React.ReactElement }) => {
   );
 };
 
-function ScrollTop({ children }: { children: React.ReactElement }) {
+const ScrollTop = ({ children }: { children: React.ReactElement }) => {
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 100,
@@ -54,9 +54,11 @@ function ScrollTop({ children }: { children: React.ReactElement }) {
       </Box>
     </Fade>
   );
-}
+};
 
 const NavBar = () => {
+  const matches = useMediaQuery("(min-width:550px)");
+
   return (
     <React.Fragment>
       <HideOnScroll>
@@ -68,7 +70,11 @@ const NavBar = () => {
           }}
         >
           <Toolbar>
-            <Typography variant="h6" component="div">
+            <Typography
+              variant="h6"
+              component="div"
+              sx={matches ? {} : { display: "none" }}
+            >
               Mangawards
             </Typography>
             <Stack
@@ -82,17 +88,30 @@ const NavBar = () => {
             >
               <Link to="/">
                 <Button sx={buttonStyles}>
-                  <Typography>Manga</Typography>
+                  <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
+                    Manga
+                  </Typography>
                 </Button>
               </Link>
               <Link to="/awards">
                 <Button sx={buttonStyles}>
-                  <Typography>Awards</Typography>
+                  <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
+                    Awards
+                  </Typography>
                 </Button>
               </Link>
               <Link to="/authors">
                 <Button sx={buttonStyles}>
-                  <Typography>Authors</Typography>
+                  <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
+                    Authors
+                  </Typography>
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button sx={buttonStyles}>
+                  <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
+                    Login
+                  </Typography>
                 </Button>
               </Link>
             </Stack>

@@ -24,7 +24,7 @@ authorsRouter.get("/", async (request, response, next) => {
     Author.updateMany({});
     response.json(authors);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -39,7 +39,7 @@ authorsRouter.get("/:id", async (request, response, next) => {
 
     response.json(author);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
