@@ -8,6 +8,7 @@ import { Fade, Box, Fab, Button, Stack } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const buttonStyles = {
   color: "white",
@@ -59,6 +60,19 @@ const ScrollTop = ({ children }: { children: React.ReactElement }) => {
 const NavBar = () => {
   const matches = useMediaQuery("(min-width:550px)");
 
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [id, setId] = useState("");
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedInUser");
+    console.log(loggedUserJSON);
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setId(user.id);
+      setLoggedIn(true);
+    }
+  }, []);
+
   return (
     <React.Fragment>
       <HideOnScroll>
@@ -107,13 +121,23 @@ const NavBar = () => {
                   </Typography>
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button sx={buttonStyles}>
-                  <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
-                    Login
-                  </Typography>
-                </Button>
-              </Link>
+              {loggedIn ? (
+                <Link to={`/user/${id}`}>
+                  <Button sx={buttonStyles}>
+                    <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
+                      User
+                    </Typography>
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <Button sx={buttonStyles}>
+                    <Typography sx={matches ? {} : { fontSize: "0.9em" }}>
+                      Login
+                    </Typography>
+                  </Button>
+                </Link>
+              )}
             </Stack>
           </Toolbar>
         </AppBar>

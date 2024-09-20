@@ -47,19 +47,21 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
         <Box
           sx={{ display: "flex", alignItems: "center", paddingRight: "16px" }}
         >
-          <Box
-            component="img"
-            src={`${proxyLink}${manga.coverArt}.256.jpg`}
-            alt="Manga cover"
-            loading="lazy"
-            sx={{
-              width: 100,
-              height: 100,
-              objectFit: "contain",
-              borderRadius: "4px",
-              padding: 0,
-            }}
-          />
+          <Link to={`/manga/${manga.id}`}>
+            <Box
+              component="img"
+              src={`${proxyLink}${manga.coverArt}.256.jpg`}
+              alt="Manga cover"
+              loading="lazy"
+              sx={{
+                width: 100,
+                height: 100,
+                objectFit: "contain",
+                borderRadius: "4px",
+                padding: 0,
+              }}
+            />
+          </Link>
         </Box>
 
         {/* Content */}

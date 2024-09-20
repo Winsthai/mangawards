@@ -53,3 +53,10 @@ export interface Manga {
   tags: string[];
   awards: { award: string; id: string }[];
 }
+
+export interface User {
+  username: string;
+  passwordHash: string;
+  starredManga: { title: string; id: string }[];
+  completedManga: { title: string; id: string }[];
+}

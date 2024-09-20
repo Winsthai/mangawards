@@ -8,6 +8,7 @@ import AuthorPage from "./components/Authors/AuthorPage";
 import MangaPage from "./components/Manga/MangaPage";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Login/SignUp";
+import UserPage from "./components/User/UserPage";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/manga/:id" element={<MangaPage></MangaPage>}></Route>
             <Route path="/login" element={<Login></Login>}></Route>
             <Route path="/signUp" element={<SignUp></SignUp>}></Route>
+            <Route path="/user/:id" element={<UserPage></UserPage>}></Route>
           </Routes>
         </BrowserRouter>
       </div>

@@ -14,45 +14,50 @@ interface user {
 }
 
 // Login with username and password
-loginRouter.post("/", async (request, response) => {
-  const { username, password } = request.body as user;
+loginRouter.post("/", async (request, response, next) => {
+  try {
+    const { username, password } = request.body as user;
 
-  let user = await AdminUser.findOne({ username });
-  let role = "admin";
-  if (user === null) {
-    user = await User.findOne({ username });
-    role = "user";
-  }
-  // If user does not exist, don't check for password
-  const passwordCorrect =
-    user === null ? false : await bcrypt.compare(password, user.passwordHash);
+    let user = await AdminUser.findOne({ username });
+    let role = "admin";
+    if (user === null) {
+      user = await User.findOne({ username });
+      role = "user";
+    }
+    // If user does not exist, don't check for password
+    const passwordCorrect =
+      user === null ? false : await bcrypt.compare(password, user.passwordHash);
 
-  if (!user || !passwordCorrect) {
-    return response.status(401).json({
-      error: "invalid username or password",
+    if (!user || !passwordCorrect) {
+      return response.status(401).json({
+        error: "invalid username or password",
+      });
+    }
+
+    // Create a token, contains username, user id, and digital signature
+    const userForToken = {
+      username: user.username,
+      id: user._id,
+      role: role,
+    };
+
+    let token;
+    if (role === "admin") {
+      token = jwt.sign(userForToken, SECRET!, { expiresIn: 60 * 60 });
+    } else {
+      token = jwt.sign(userForToken, SECRET!);
+    }
+
+    response.status(200).send({
+      token,
+      username: user.username,
+      id: user._id,
     });
+    return;
+  } catch (error) {
+    next(error);
+    return;
   }
-
-  // Create a token, contains username, user id, and digital signature
-  const userForToken = {
-    username: user.username,
-    id: user._id,
-    role: role,
-  };
-
-  let token;
-  if (role === "admin") {
-    token = jwt.sign(userForToken, SECRET!, { expiresIn: 60 * 60 });
-  } else {
-    token = jwt.sign(userForToken, SECRET!);
-  }
-
-  response.status(200).send({
-    token,
-    username: user.username,
-    name: user.name,
-  });
-  return;
 });
 
 export default loginRouter;

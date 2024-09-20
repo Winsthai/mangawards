@@ -1,14 +1,17 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserTextField from "./UserTextField";
+import loginService from "../../services/login";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Basic validation
@@ -20,10 +23,24 @@ const Login = () => {
     // Do stuff here
     console.log("Sign In:", { username, password });
 
-    // Reset error and form
-    setError("");
-    setUsername("");
-    setPassword("");
+    try {
+      const user = await loginService.login(username, password);
+
+      window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+      // Reset error and form
+      setError("");
+      setUsername("");
+      setPassword("");
+
+      navigate("/");
+
+      window.location.reload();
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      setError("Invalid username or password");
+    }
   };
 
   return (

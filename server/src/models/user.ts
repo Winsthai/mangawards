@@ -1,11 +1,9 @@
 import mongoose, { Schema, Types } from "mongoose";
 
 export interface IUser {
-  name: string;
   username: string;
   passwordHash: string;
   starredManga: Types.ObjectId[];
-  completedManga: Types.ObjectId[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -21,15 +19,8 @@ const userSchema = new mongoose.Schema<IUser>({
       message: "Username needs to be at least 3 characters long with no spaces",
     },
   },
-  name: String,
   passwordHash: String,
   starredManga: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Manga",
-    },
-  ],
-  completedManga: [
     {
       type: Schema.Types.ObjectId,
       ref: "Manga",

@@ -49,8 +49,8 @@ const SignUp = () => {
         <Box
           sx={{
             backgroundColor: "#1c1f26",
-            width: { xs: "100%", sm: "400px" }, // Square box with responsive width
-            height: { xs: "100%", sm: "450px" }, // Adjust height for extra field
+            width: "100%",
+            height: "400px",
             borderRadius: "12px",
             display: "flex",
             flexDirection: "column",

@@ -17,10 +17,7 @@ userRouter.get("/:id", async (request, response, next) => {
     const id = request.params.id;
 
     const user = await User.findById(id)
-      .populate([
-        { path: "starredManga", select: "title" },
-        { path: "completedManga", select: "title" },
-      ])
+      .populate([{ path: "starredManga", select: "title" }])
       .select("-passwordHash");
 
     response.json(user);
