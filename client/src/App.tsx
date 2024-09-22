@@ -9,8 +9,33 @@ import MangaPage from "./components/Manga/MangaPage";
 import Login from "./components/Login/Login";
 import SignUp from "./components/Login/SignUp";
 import UserPage from "./components/User/UserPage";
+import { useEffect } from "react";
+import { AxiosError } from "axios";
+import userService from "./services/user";
+import { useUserContext } from "./UserContext";
 
 const App = () => {
+  const { setUser } = useUserContext();
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedInUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      console.log(user.id);
+      const fetchUser = async () => {
+        try {
+          const fetchedUser = await userService.getUser(user.id as string);
+          setUser(fetchedUser);
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            setUser(null);
+          }
+        }
+      };
+      void fetchUser();
+    }
+  }, [setUser]);
+
   return (
     <>
       <div>

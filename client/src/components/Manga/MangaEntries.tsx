@@ -20,13 +20,14 @@ const MangaEntries = () => {
   const [manga, setManga] = useState<BasicManga[]>([]);
   const [loading, setLoading] = useState(true); // To manage loading state
 
+  const fetchManga = async () => {
+    const fetchedManga = await mangaService.getAllBasic();
+    setManga(fetchedManga);
+    setLoading(false); // Set loading to false once data is fetched
+  };
+
   useEffect(() => {
-    const fetchManga = async () => {
-      const fetchedManga = await mangaService.getAllBasic();
-      setManga(fetchedManga);
-      setLoading(false); // Set loading to false once data is fetched
-    };
-    void fetchManga();
+    fetchManga();
   }, []);
 
   const [currManga, setCurrManga] = useState<BasicManga[]>([]);

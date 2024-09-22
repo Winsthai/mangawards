@@ -1,10 +1,23 @@
 import { Box, Card, CardContent, Typography, Chip } from "@mui/material";
 import { BasicManga } from "../../types";
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../UserContext";
 
 const proxyLink = "https://res.cloudinary.com/dxdkcfww1/image/fetch/";
 
 const MangaCard = ({ manga }: { manga: BasicManga }) => {
+  const { user } = useUserContext();
+  let starredManga = null;
+  if (user) {
+    starredManga = user.starredManga.map((manga) => manga.title);
+  }
+
+  let borderColor = "white";
+
+  if (starredManga && starredManga.includes(manga.title)) {
+    borderColor = "yellow";
+  }
+
   const awardMap = new Map();
 
   for (const award of manga.awards) {
@@ -40,7 +53,7 @@ const MangaCard = ({ manga }: { manga: BasicManga }) => {
           marginTop: "16px",
           padding: "16px 0 16px 0",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-          border: "solid",
+          border: `solid ${borderColor}`,
         }}
       >
         {/* Cover Image */}

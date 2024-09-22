@@ -65,7 +65,6 @@ const NavBar = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser");
-    console.log(loggedUserJSON);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setId(user.id);

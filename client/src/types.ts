@@ -55,8 +55,7 @@ export interface Manga {
 }
 
 export interface User {
+  id: string;
   username: string;
-  passwordHash: string;
   starredManga: { title: string; id: string }[];
-  completedManga: { title: string; id: string }[];
 }

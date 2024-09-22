@@ -20,9 +20,6 @@ const Login = () => {
       return;
     }
 
-    // Do stuff here
-    console.log("Sign In:", { username, password });
-
     try {
       const user = await loginService.login(username, password);
 

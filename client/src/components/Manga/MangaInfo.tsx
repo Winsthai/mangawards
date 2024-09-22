@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Manga } from "../../types";
 import {
   Card,
@@ -14,8 +14,24 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../UserContext";
 
 const MangaInfo = ({ manga }: { manga: Manga }) => {
+  const [starred, setStarred] = useState(false);
+
+  const { user } = useUserContext();
+
+  useEffect(() => {
+    let starredManga = null;
+    if (user) {
+      starredManga = user.starredManga.map((manga) => manga.title);
+    }
+
+    if (starredManga && starredManga.includes(manga.title)) {
+      setStarred(true);
+    }
+  }, []);
+
   const [expanded, setExpanded] = useState(false);
 
   const handleExpand = () => {
@@ -234,6 +250,9 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           >
             {manga.year ? `Year: ${manga.year}` : ""}
           </Typography>
+
+          {/* Star button */}
+          {starred ? <>yes</> : <>no</>}
 
           {/* Expandable Award List */}
           <Accordion
