@@ -49,3 +49,24 @@ export const adminConfirmation: RequestHandler = (request, _response, next) => {
 
   next();
 };
+
+export const userConfirmation: RequestHandler = (request, _response, next) => {
+  let token: string;
+
+  const id = request.params.id;
+
+  const authorization = request.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    token = authorization.replace("Bearer ", "");
+
+    const decodedToken = jwt.verify(token, SECRET!) as jwt.JwtPayload;
+
+    if (!decodedToken.id || decodedToken.id != id) {
+      next(jwt.JsonWebTokenError);
+    }
+  } else {
+    next(jwt.JsonWebTokenError);
+  }
+
+  next();
+};

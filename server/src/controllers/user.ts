@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import AdminUser from "../models/adminUser";
 import Manga from "../models/manga";
 import { parseMangaId } from "../utils/parseManga";
+import { userConfirmation } from "../utils/middleware";
 
 const userRouter = express.Router();
 
@@ -18,9 +19,9 @@ userRouter.get("/:id", async (request, response, next) => {
   try {
     const id = request.params.id;
 
-    const user = await User.findById(id)
-      .populate([{ path: "starredManga", select: "title" }])
-      .select("-passwordHash");
+    const user = await User.findById(id).populate([
+      { path: "starredManga", select: "title" },
+    ]);
 
     response.json(user);
   } catch (error) {
@@ -66,7 +67,7 @@ userRouter.post("/", async (request, response, next) => {
 });
 
 // Add a manga to list of user's starred manga
-userRouter.post("/:id", async (request, response, next) => {
+userRouter.post("/:id", userConfirmation, async (request, response, next) => {
   try {
     const id = request.params.id;
 
@@ -80,7 +81,7 @@ userRouter.post("/:id", async (request, response, next) => {
       return;
     }
 
-    const user = await User.findById(id).select("-passwordHash");
+    const user = await User.findById(id);
 
     if (!user) {
       response.status(400).json({ error: "user id does not exist" });
@@ -103,7 +104,7 @@ userRouter.post("/:id", async (request, response, next) => {
 });
 
 // Delete manga from a list of user's starred manga
-userRouter.delete("/:id", async (request, response, next) => {
+userRouter.delete("/:id", userConfirmation, async (request, response, next) => {
   try {
     const id = request.params.id;
 
@@ -117,7 +118,7 @@ userRouter.delete("/:id", async (request, response, next) => {
       return;
     }
 
-    const user = await User.findById(id).select("-passwordHash");
+    const user = await User.findById(id);
 
     if (!user) {
       response.status(400).json({ error: "user id does not exist" });
