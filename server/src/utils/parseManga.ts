@@ -220,3 +220,15 @@ export const confirmAward = (object: unknown): string => {
 
   throw new Error("Incorrect data: a field missing");
 };
+
+export const parseMangaId = (object: unknown): string => {
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect or missing data");
+  }
+
+  if ("mangaId" in object && isString(object.mangaId)) {
+    return object.mangaId;
+  }
+
+  throw new Error("Incorrect data: a field missing");
+};

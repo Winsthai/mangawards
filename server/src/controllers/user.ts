@@ -3,6 +3,8 @@ import express from "express";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 import AdminUser from "../models/adminUser";
+import Manga from "../models/manga";
+import { parseMangaId } from "../utils/parseManga";
 
 const userRouter = express.Router();
 
@@ -60,6 +62,80 @@ userRouter.post("/", async (request, response, next) => {
   } catch (error) {
     next(error);
     return;
+  }
+});
+
+// Add a manga to list of user's starred manga
+userRouter.post("/:id", async (request, response, next) => {
+  try {
+    const id = request.params.id;
+
+    const mangaId = parseMangaId(request.body);
+
+    // Check that manga exists
+    const manga = await Manga.findById(mangaId);
+
+    if (!manga) {
+      response.status(400).json({ error: "manga id does not exist" });
+      return;
+    }
+
+    const user = await User.findById(id).select("-passwordHash");
+
+    if (!user) {
+      response.status(400).json({ error: "user id does not exist" });
+      return;
+    }
+
+    if (user.starredManga.includes(manga._id)) {
+      response.status(400).json({ error: "that manga is already starred" });
+      return;
+    }
+
+    user.starredManga.push(manga._id);
+
+    const savedUser = await user.save();
+
+    response.status(200).json(savedUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Delete manga from a list of user's starred manga
+userRouter.delete("/:id", async (request, response, next) => {
+  try {
+    const id = request.params.id;
+
+    const mangaId = parseMangaId(request.body);
+
+    // Check that manga exists
+    const manga = await Manga.findById(mangaId);
+
+    if (!manga) {
+      response.status(400).json({ error: "manga id does not exist" });
+      return;
+    }
+
+    const user = await User.findById(id).select("-passwordHash");
+
+    if (!user) {
+      response.status(400).json({ error: "user id does not exist" });
+      return;
+    }
+
+    if (!user.starredManga.includes(manga._id)) {
+      response.status(400).json({ error: "that manga is not starred" });
+      return;
+    }
+
+    user.starredManga = user.starredManga.filter((id) => !id.equals(manga._id));
+
+    const savedUser = await user.save();
+
+    response.status(200).json(savedUser);
+  } catch (error) {
+    next(error);
   }
 });
 

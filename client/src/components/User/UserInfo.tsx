@@ -8,30 +8,63 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
+  Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { User } from "../../types";
 import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useNavigate } from "react-router-dom";
 
 const UserInfo = ({ user }: { user: User }) => {
   const [expanded, setExpanded] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const handleSignOut = () => {
+    window.localStorage.clear();
+    navigate("/");
+    window.location.reload();
   };
 
   return (
     <Card sx={{ backgroundColor: "#1c1f26", color: "white" }}>
       <CardContent>
         {/* Username */}
-        <Typography
-          variant="h4"
-          fontWeight="bolder"
-          sx={{ marginBottom: "1em" }}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ marginBottom: "2em" }}
         >
-          {user.username}
-        </Typography>
+          <Typography variant="h4" fontWeight="bolder">
+            {user.username}
+          </Typography>
+          <Button
+            onClick={handleSignOut}
+            sx={{
+              backgroundColor: "#3f51b5", // Primary button color
+              color: "white",
+              padding: "10px 20px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              textTransform: "none", // Keeps the button text normal-case
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "#303f9f", // Darker shade on hover
+              },
+            }}
+          >
+            Log out
+          </Button>
+        </Stack>
 
         {/* Starred Manga List */}
         <Accordion
