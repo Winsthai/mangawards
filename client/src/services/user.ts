@@ -50,4 +50,13 @@ const deleteMangaFromUser = async (
   return data;
 };
 
-export default { getUser, addMangaToUser, deleteMangaFromUser };
+const addNewUser = async (username: string, password: string) => {
+  const { data } = await axios.post(`${apiBaseUrl}/user`, {
+    username,
+    password,
+  });
+
+  return data;
+};
+
+export default { getUser, addMangaToUser, deleteMangaFromUser, addNewUser };

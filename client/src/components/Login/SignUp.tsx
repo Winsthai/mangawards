@@ -1,15 +1,25 @@
 import React, { useState } from "react";
-import { Box, Button, Typography, Container, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  Container,
+  Stack,
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import UserTextField from "./UserTextField";
+import userService from "../../services/user";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Basic validation for email and password
@@ -25,13 +35,19 @@ const SignUp = () => {
     }
 
     // Implement logic here
-    console.log("Sign Up:", { username, password });
+    await userService.addNewUser(username, password);
 
     // Reset error and form
     setError("");
     setUsername("");
     setPassword("");
     setConfirmPassword("");
+
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -45,6 +61,20 @@ const SignUp = () => {
           height: "100vh",
         }}
       >
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }} // Positioning
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Account created successfully!
+          </Alert>
+        </Snackbar>
         {/* Square box container */}
         <Box
           sx={{

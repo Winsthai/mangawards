@@ -2,7 +2,6 @@
 import express from "express";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
-import AdminUser from "../models/adminUser";
 import Manga from "../models/manga";
 import { parseMangaId } from "../utils/parseManga";
 import { userConfirmation } from "../utils/middleware";
@@ -40,12 +39,12 @@ userRouter.post("/", async (request, response, next) => {
     }
 
     // Check if admin with that username exists already
-    const check = await AdminUser.find({ username: username });
+    /* const check = await AdminUser.find({ username: username });
     if (check === undefined || check.length !== 0) {
       const error = new Error("E11000 duplicate key error");
       error.name = "MongoServerError";
       throw error;
-    }
+    } */
 
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -54,7 +53,6 @@ userRouter.post("/", async (request, response, next) => {
       username,
       passwordHash,
       starredManga: [],
-      completedManga: [],
     });
 
     const savedUser = await user.save();
