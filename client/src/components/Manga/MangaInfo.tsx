@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Manga, User } from "../../types";
 import {
   Card,
@@ -20,6 +20,8 @@ import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserContext";
 import MangaInfoDescription from "./MangaInfoDescription";
 import userService from "../../services/user";
+import ReactMarkdown from "react-markdown";
+import MarkdownLink from "./MarkdownLink";
 
 const MangaInfo = ({ manga }: { manga: Manga }) => {
   const [starred, setStarred] = useState(false);
@@ -233,7 +235,17 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
         <CardContent>
           {/* Manga Description */}
           {manga.description ? (
-            <MangaInfoDescription>{manga.description}</MangaInfoDescription>
+            <Typography>
+              <ReactMarkdown
+                components={{
+                  a: ({ href, children }) => (
+                    <MarkdownLink href={href!}>{children}</MarkdownLink>
+                  ),
+                }}
+              >
+                {manga.description}
+              </ReactMarkdown>
+            </Typography>
           ) : (
             <></>
           )}
