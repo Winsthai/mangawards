@@ -21,7 +21,6 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      console.log(user.id);
       const fetchUser = async () => {
         try {
           const fetchedUser = await userService.getUser(user.id as string);

@@ -52,6 +52,7 @@ export interface Manga {
   year: number | null;
   tags: string[];
   awards: { award: string; id: string }[];
+  id: string;
 }
 
 export interface User {

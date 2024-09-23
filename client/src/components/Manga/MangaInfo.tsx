@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Manga } from "../../types";
+import { Manga, User } from "../../types";
 import {
   Card,
   CardContent,
@@ -11,15 +11,20 @@ import {
   ListItem,
   ListItemText,
   Box,
+  SelectChangeEvent,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserContext";
+import MangaInfoDescription from "./MangaInfoDescription";
+import userService from "../../services/user";
 
 const MangaInfo = ({ manga }: { manga: Manga }) => {
   const [starred, setStarred] = useState(false);
 
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   useEffect(() => {
     let starredManga = null;
@@ -30,12 +35,50 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
     if (starredManga && starredManga.includes(manga.title)) {
       setStarred(true);
     }
-  }, []);
+  }, [manga.title, user]);
 
   const [expanded, setExpanded] = useState(false);
 
   const handleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const handleStar = async (event: SelectChangeEvent<string>) => {
+    if (event.target.value === "No") {
+      // Remove from starred manga via API
+      await userService.deleteMangaFromUser(user!.id, manga.id);
+
+      // Remove from context
+      const newUser: User = {
+        ...user,
+        starredManga: user!.starredManga.filter(
+          (starredManga) => starredManga.id !== manga.id
+        ),
+      } as User;
+      setUser(newUser);
+
+      setStarred(false);
+    } else if (event.target.value === "Yes") {
+      // Add to starred manga via API
+      await userService.addMangaToUser(user!.id, manga.id);
+
+      // Add to context
+      const newUser = {
+        ...user,
+        starredManga: user!.starredManga.concat({
+          title: manga.title,
+          id: manga.id,
+        }),
+      } as User;
+      setUser(newUser);
+      console.log(
+        user?.starredManga.filter(
+          (starredManga) => starredManga.id !== manga.id
+        )
+      );
+
+      setStarred(true);
+    }
   };
 
   const awardMap = new Map();
@@ -190,69 +233,76 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
         <CardContent>
           {/* Manga Description */}
           {manga.description ? (
-            <Typography
-              variant="body1"
-              className="display-linebreak"
-              sx={{ marginBottom: "1em" }}
-            >
-              {manga.description}
-            </Typography>
+            <MangaInfoDescription>{manga.description}</MangaInfoDescription>
           ) : (
             <></>
           )}
 
           {/* Manga Tags */}
-          <Typography variant="body1" sx={{ marginBottom: "1em" }}>
+          <MangaInfoDescription>
             Genres: {manga.tags.join(", ")}
-          </Typography>
+          </MangaInfoDescription>
 
           {/* Manga Volumes and Chapters */}
           {manga.volumes && manga.chapters ? (
-            <Typography
-              variant="body1"
-              className="display-linebreak"
-              sx={{ marginBottom: "1em" }}
-            >
+            <MangaInfoDescription>
               Volumes: {manga.volumes} <br />
               Chapters: {manga.chapters}
-            </Typography>
+            </MangaInfoDescription>
           ) : (
             <></>
           )}
 
           {/* Manga demographic */}
           {manga.demographic ? (
-            <Typography
-              variant="body1"
-              className="display-linebreak"
-              sx={{ marginBottom: "1em" }}
-            >
+            <MangaInfoDescription>
               Demographic: {manga.demographic}
-            </Typography>
+            </MangaInfoDescription>
           ) : (
             <></>
           )}
 
           {/* Manga Status */}
-          <Typography
-            variant="body1"
-            className="display-linebreak"
-            sx={{ marginBottom: "1em" }}
-          >
-            Status: {manga.status}
-          </Typography>
+          <MangaInfoDescription>Status: {manga.status}</MangaInfoDescription>
 
           {/* Manga year */}
-          <Typography
-            variant="body1"
-            className="display-linebreak"
-            sx={{ marginBottom: "1em" }}
-          >
+          <MangaInfoDescription>
             {manga.year ? `Year: ${manga.year}` : ""}
-          </Typography>
+          </MangaInfoDescription>
 
           {/* Star button */}
-          {starred ? <>yes</> : <>no</>}
+          {user ? (
+            <>
+              <MangaInfoDescription>Star this manga?</MangaInfoDescription>
+              <Select
+                value={starred ? "Yes" : "No"}
+                onChange={handleStar}
+                sx={{
+                  width: "6em",
+                  backgroundColor: "#1c1f26",
+                  color: "white",
+                  ".MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(228, 219, 233, 0.25)",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(228, 219, 233, 0.25)",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "rgba(228, 219, 233, 0.25)",
+                  },
+                  ".MuiSvgIcon-root ": {
+                    fill: "white !important",
+                  },
+                }}
+                displayEmpty
+              >
+                <MenuItem value="Yes">Yes</MenuItem>
+                <MenuItem value="No">No</MenuItem>
+              </Select>
+            </>
+          ) : (
+            <></>
+          )}
 
           {/* Expandable Award List */}
           <Accordion

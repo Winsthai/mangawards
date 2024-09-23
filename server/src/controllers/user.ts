@@ -104,40 +104,46 @@ userRouter.post("/:id", userConfirmation, async (request, response, next) => {
 });
 
 // Delete manga from a list of user's starred manga
-userRouter.delete("/:id", userConfirmation, async (request, response, next) => {
-  try {
-    const id = request.params.id;
+userRouter.put(
+  "/:id/removeManga",
+  userConfirmation,
+  async (request, response, next) => {
+    try {
+      const id = request.params.id;
 
-    const mangaId = parseMangaId(request.body);
+      const mangaId = parseMangaId(request.body);
 
-    // Check that manga exists
-    const manga = await Manga.findById(mangaId);
+      // Check that manga exists
+      const manga = await Manga.findById(mangaId);
 
-    if (!manga) {
-      response.status(400).json({ error: "manga id does not exist" });
-      return;
+      if (!manga) {
+        response.status(400).json({ error: "manga id does not exist" });
+        return;
+      }
+
+      const user = await User.findById(id);
+
+      if (!user) {
+        response.status(400).json({ error: "user id does not exist" });
+        return;
+      }
+
+      if (!user.starredManga.includes(manga._id)) {
+        response.status(400).json({ error: "that manga is not starred" });
+        return;
+      }
+
+      user.starredManga = user.starredManga.filter(
+        (id) => !id.equals(manga._id)
+      );
+
+      const savedUser = await user.save();
+
+      response.status(200).json(savedUser);
+    } catch (error) {
+      next(error);
     }
-
-    const user = await User.findById(id);
-
-    if (!user) {
-      response.status(400).json({ error: "user id does not exist" });
-      return;
-    }
-
-    if (!user.starredManga.includes(manga._id)) {
-      response.status(400).json({ error: "that manga is not starred" });
-      return;
-    }
-
-    user.starredManga = user.starredManga.filter((id) => !id.equals(manga._id));
-
-    const savedUser = await user.save();
-
-    response.status(200).json(savedUser);
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 export default userRouter;

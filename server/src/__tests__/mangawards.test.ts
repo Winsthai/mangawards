@@ -95,7 +95,7 @@ describe("Mangawards", () => {
 
     await api.post("/api/admin").send(account);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { body } = await api.post("/api/login/admin").send(loginInfo);
+    const { body } = await api.post("/api/login").send(loginInfo);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     token = body.token;
   });
