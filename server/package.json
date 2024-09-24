@@ -6,7 +6,7 @@
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint .",
-    "start": "node build/index.ts",
+    "start": "npm run tsc && node build/index.js",
     "test": "jest"
   },
   "author": "Winston Thai",
