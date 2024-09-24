@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import awardsRouter from "../controllers/awards";
 import { errorHandler } from "../utils/middleware";
-import adminUserRouter from "../controllers/admin";
+//import adminUserRouter from "../controllers/admin";
 import loginRouter from "../controllers/login";
 import mangaRouter from "../controllers/manga";
 import authorsRouter from "../controllers/authors";
@@ -20,7 +20,7 @@ const createServer = () => {
 
   app.use("/api/authors", authorsRouter);
 
-  app.use("/api/admin", adminUserRouter);
+  //app.use("/api/admin", adminUserRouter);
 
   app.use("/api/user", userRouter);
 
