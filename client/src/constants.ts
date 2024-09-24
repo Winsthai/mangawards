@@ -1,6 +1,4 @@
-import "dotenv/config";
-
-export const apiBaseUrl = process.env.REACT_BACKEND_URL;
+export const apiBaseUrl = import.meta.env.VITE_REACT_BACKEND_URL;
 export const TAGS = [
   "Action",
   "Adventure",
