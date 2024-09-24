@@ -1,4 +1,6 @@
-export const apiBaseUrl = "http://localhost:3003/api";
+import "dotenv/config";
+
+export const apiBaseUrl = process.env.REACT_BACKEND_URL;
 export const TAGS = [
   "Action",
   "Adventure",
