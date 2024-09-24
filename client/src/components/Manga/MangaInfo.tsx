@@ -23,6 +23,8 @@ import userService from "../../services/user";
 import ReactMarkdown from "react-markdown";
 import MarkdownLink from "./MarkdownLink";
 
+const proxyLink = "https://res.cloudinary.com/dxdkcfww1/image/fetch/";
+
 const MangaInfo = ({ manga }: { manga: Manga }) => {
   const [starred, setStarred] = useState(false);
 
@@ -122,7 +124,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundImage: `url(${manga.coverArt})`, // Replace with the correct path
+            backgroundImage: `url(${proxyLink}${manga.coverArt})`, // Replace with the correct path
             backgroundSize: "cover",
             backgroundPosition: "50% 25%",
             filter: "blur(4px) brightness(0.5)",
@@ -153,7 +155,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
             }}
           >
             <img
-              src={`${manga.coverArt}.256.jpg`} // Replace with the correct path
+              src={`${proxyLink}${manga.coverArt}.256.jpg`} // Replace with the correct path
               alt={manga.title}
               style={{
                 width: "100%",
