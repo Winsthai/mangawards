@@ -1,4 +1,4 @@
-export const apiBaseUrl = import.meta.env.VITE_REACT_BACKEND_URL;
+export const apiBaseUrl = `${import.meta.env.VITE_REACT_BACKEND_URL}/api`;
 export const TAGS = [
   "Action",
   "Adventure",
