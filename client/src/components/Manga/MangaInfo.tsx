@@ -128,7 +128,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
             top: 0,
             left: 0,
             width: "100%",
-            height: "100%",
+            height: "110%",
             backgroundImage: `url(${proxyLink}${manga.coverArt})`, // Replace with the correct path
             backgroundSize: "cover",
             backgroundPosition: "50% 25%",
