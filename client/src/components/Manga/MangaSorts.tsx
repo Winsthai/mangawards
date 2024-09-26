@@ -3,6 +3,8 @@ import {
   ToggleButton,
   Typography,
   Stack,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 const MangaSorts = ({
@@ -15,15 +17,27 @@ const MangaSorts = ({
     newSort: string | null
   ) => void;
 }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
-    <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-      <Typography>Sort by:</Typography>
+    <Stack
+      direction="row"
+      spacing={2}
+      sx={{ alignItems: "center", justifyContent: "center" }}
+    >
+      <Typography
+        sx={{ fontSize: { xs: "0.9em", sm: "1em" }, whiteSpace: "nowrap" }}
+      >
+        Sort by:
+      </Typography>
       <ToggleButtonGroup
         value={sort}
         exclusive
         onChange={handleSort}
         aria-label="sort manga by"
         color="info"
+        orientation={isSmallScreen ? "vertical" : "horizontal"}
       >
         <ToggleButton
           value="Awards Won"
@@ -37,6 +51,8 @@ const MangaSorts = ({
             outlineWidth: "1px",
             outlineStyle: "solid",
             margin: "2px",
+            whiteSpace: "nowrap",
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
           }}
         >
           Awards Won
@@ -53,6 +69,8 @@ const MangaSorts = ({
             outlineWidth: "1px",
             outlineStyle: "solid",
             margin: "2px",
+            whiteSpace: "nowrap",
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
           }}
         >
           Alphabetical
@@ -69,6 +87,8 @@ const MangaSorts = ({
             outlineWidth: "1px",
             outlineStyle: "solid",
             margin: "2px",
+            whiteSpace: "nowrap",
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
           }}
         >
           Year (Descending)

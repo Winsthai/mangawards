@@ -14,6 +14,8 @@ import {
   SelectChangeEvent,
   MenuItem,
   Select,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
@@ -104,6 +106,9 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
       : awardNames.push([`${key} (${value.count})`, value.id])
   );
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // True when screen is xs
+
   return (
     <div style={{ alignItems: "center" }}>
       <Box
@@ -121,7 +126,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
             top: 0,
             left: 0,
             width: "100%",
-            height: "100%",
+            height: "110%",
             backgroundImage: `url(${manga.coverArt})`, // Replace with the correct path
             backgroundSize: "cover",
             backgroundPosition: "50% 25%",
@@ -168,7 +173,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           {/* Text Section */}
           <Box sx={{ marginLeft: "40px" }}>
             <Typography
-              variant="h3"
+              variant={isSmallScreen ? "h5" : "h3"}
               sx={{
                 color: "white",
                 fontWeight: "bold",
@@ -285,7 +290,7 @@ const MangaInfo = ({ manga }: { manga: Manga }) => {
           {/* Star button */}
           {user ? (
             <>
-              <MangaInfoDescription>Star this manga?</MangaInfoDescription>
+              <MangaInfoDescription>Save this manga?</MangaInfoDescription>
               <Select
                 value={starred ? "Yes" : "No"}
                 onChange={handleStar}

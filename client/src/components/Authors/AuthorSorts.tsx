@@ -16,8 +16,17 @@ const AuthorSorts = ({
   ) => void;
 }) => {
   return (
-    <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-      <Typography>Sort by:</Typography>
+    <Stack
+      direction="row"
+      spacing={{ xs: 1, sm: 2 }}
+      sx={{ alignItems: "center" }}
+    >
+      <Typography
+        variant="body1"
+        sx={{ fontSize: { xs: "0.9em", sm: "1em" }, whiteSpace: "nowrap" }}
+      >
+        Sort by:
+      </Typography>
       <ToggleButtonGroup
         value={sort}
         exclusive
@@ -37,6 +46,8 @@ const AuthorSorts = ({
             outlineWidth: "1px",
             outlineStyle: "solid",
             margin: "2px",
+            whiteSpace: "nowrap",
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
           }}
         >
           Awards Won
@@ -53,6 +64,8 @@ const AuthorSorts = ({
             outlineWidth: "1px",
             outlineStyle: "solid",
             margin: "2px",
+            whiteSpace: "nowrap",
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
           }}
         >
           Alphabetical

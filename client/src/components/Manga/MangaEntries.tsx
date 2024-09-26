@@ -1,9 +1,4 @@
-import {
-  Container,
-  Pagination,
-  SelectChangeEvent,
-  useMediaQuery,
-} from "@mui/material";
+import { Container, Pagination, SelectChangeEvent } from "@mui/material";
 import { BasicManga } from "../../types";
 import MangaCard from "./MangaCard";
 import React, { useEffect, useRef, useState } from "react";
@@ -157,8 +152,6 @@ const MangaEntries = () => {
     }
   };
 
-  const matches = useMediaQuery("(min-width:742px)");
-
   return (
     <div>
       <Container
@@ -167,17 +160,26 @@ const MangaEntries = () => {
           marginTop: "2%",
           marginBottom: "2%",
           justifyContent: "space-evenly",
+          flexWrap: "wrap",
+          /* flexDirection: {
+            xs: "column", // Stack the filters vertically on small screens
+            sm: "row", // Display them in a row on larger screens
+          }, */
+          gap: {
+            xs: 2, // Add more gap between elements on mobile
+            sm: 0, // No extra gap on larger screens
+          },
+          alignItems: {
+            xs: "center", // Center the items on small screens
+            sm: "flex-start", // Align to start on larger screens
+          },
         }}
       >
         {/* Search filtering */}
-        {matches ? (
-          <SearchFilter
-            handleChange={handleChange}
-            handleKeyDown={handleKeyDown}
-          ></SearchFilter>
-        ) : (
-          <></>
-        )}
+        <SearchFilter
+          handleChange={handleChange}
+          handleKeyDown={handleKeyDown}
+        ></SearchFilter>
         {/* Tags filtering */}
         <TagsFilter tags={tags} handleTagFilter={handleTagFilter}></TagsFilter>
         {/* Awards filtering */}
@@ -196,9 +198,9 @@ const MangaEntries = () => {
           handleYearFilter={handleYearFilter}
           years={years}
         ></YearFilter>
-      </Container>
-      <Container>
-        <MangaSorts sort={sort} handleSort={handleSort}></MangaSorts>
+        <Container sx={{ marginTop: { xs: 0, sm: "1em" } }}>
+          <MangaSorts sort={sort} handleSort={handleSort}></MangaSorts>
+        </Container>
       </Container>
       <Container style={{ width: "auto" }}>
         {loading ? (

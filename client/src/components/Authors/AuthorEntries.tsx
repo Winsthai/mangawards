@@ -96,7 +96,11 @@ const AuthorEntries = () => {
     <Container>
       <Stack
         direction="row"
-        sx={{ display: "flex", justifyContent: "space-around" }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          flexWrap: "wrap",
+        }}
       >
         <SearchFilter
           handleChange={handleChange}

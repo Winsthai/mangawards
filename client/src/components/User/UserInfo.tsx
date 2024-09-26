@@ -66,7 +66,7 @@ const UserInfo = ({ user }: { user: User }) => {
           </Button>
         </Stack>
 
-        {/* Starred Manga List */}
+        {/* Saved Manga List */}
         <Accordion
           expanded={expanded}
           onChange={handleExpand}
@@ -86,7 +86,7 @@ const UserInfo = ({ user }: { user: User }) => {
               },
             }}
           >
-            <Typography>Starred Manga ({user.starredManga.length})</Typography>
+            <Typography>Saved Manga ({user.starredManga.length})</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <List>
