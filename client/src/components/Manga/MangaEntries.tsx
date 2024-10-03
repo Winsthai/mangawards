@@ -1,4 +1,10 @@
-import { Container, Pagination, SelectChangeEvent } from "@mui/material";
+import {
+  Container,
+  Pagination,
+  SelectChangeEvent,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { BasicManga } from "../../types";
 import MangaCard from "./MangaCard";
 import React, { useEffect, useRef, useState } from "react";
@@ -152,6 +158,9 @@ const MangaEntries = () => {
     }
   };
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // True when screen is xs
+
   return (
     <div>
       <Container
@@ -222,7 +231,7 @@ const MangaEntries = () => {
         count={Math.ceil(currManga.length / NUMENTRIES)}
         color="primary"
         page={page}
-        size="large"
+        size={isSmallScreen ? "small" : "large"}
         onChange={changePage}
         sx={{
           "& .MuiPaginationItem-root": {

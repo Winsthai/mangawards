@@ -143,7 +143,11 @@ const NavBar = () => {
       </HideOnScroll>
       <Toolbar />
       <ScrollTop>
-        <Fab size="small" aria-label="scroll back to top">
+        <Fab
+          size="small"
+          aria-label="scroll back to top"
+          sx={{ display: { xs: "none", sm: "flex" } }}
+        >
           <KeyboardArrowUpIcon />
         </Fab>
       </ScrollTop>
