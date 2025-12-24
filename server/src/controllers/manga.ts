@@ -58,7 +58,7 @@ mangaRouter.get("/", async (request, response, next) => {
       }
     }
 
-    Manga.updateMany({});
+    //Manga.updateMany({});
     response.json(manga);
   } catch (error) {
     next(error);

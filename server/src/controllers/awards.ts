@@ -24,7 +24,7 @@ awardsRouter.get("/", async (request, response, next) => {
       });
     }
 
-    Award.updateMany({});
+    //Award.updateMany({});
     response.json(awards);
   } catch (error) {
     next(error);

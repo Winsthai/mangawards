@@ -21,7 +21,7 @@ authorsRouter.get("/", async (request, response, next) => {
       ]);
     }
 
-    Author.updateMany({});
+    //Author.updateMany({});
     response.json(authors);
   } catch (error) {
     next(error);

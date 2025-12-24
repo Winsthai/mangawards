@@ -10,10 +10,19 @@ export const connect = async () => {
 
   const uri = mongoDb.getUri();
   await mongoose.connect(uri);
+
+  // Optionally check if mongoose.connection.db is available
+  if (!mongoose.connection.db) {
+    throw new Error("Failed to connect to in-memory database.");
+  }
 };
 
 export const cleanData = async () => {
-  await mongoose.connection.db.dropDatabase();
+  if (mongoose.connection.db) {
+    await mongoose.connection.db.dropDatabase();
+  } else {
+    throw new Error("Database connection is not available.");
+  }
 };
 
 // Disconnect from In Memory Mongo server
